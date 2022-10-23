@@ -2,7 +2,7 @@
 
 # Project: LiMu(Listen To This Music)_README.MD
 
-## *주제*
+## :hammer: *주제*
 
 youtube music, melon 등 음악 스트리밍 서비스를 통해 사용자들이 편하게 음악 청취를 하고 있다.
 
@@ -10,7 +10,7 @@ youtube music, melon 등 음악 스트리밍 서비스를 통해 사용자들이
 
 이와 같은 이유로 해당 프로젝트를 통해 사용자들이 서로 음악을 추천해주고, 의견을 나누면서 보다 풍성하게 음악 청취를 할 수 있는 서비스를 개발해보고자 한다.  
 
-## *사용 기술 스택*
+## :hammer: *사용 기술 스택*
 <div align="center">
   <img src="https://img.shields.io/badge/spring boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
   <img src="https://img.shields.io/badge/thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white">
@@ -22,7 +22,7 @@ youtube music, melon 등 음악 스트리밍 서비스를 통해 사용자들이
 </div>
  
 
-## *기능*
+## :hammer: *기능*
 
 해당 서비스 기능 사용자는 크게 관리자와 일반 회원으로 구분된다.
 
@@ -70,5 +70,5 @@ youtube music, melon 등 음악 스트리밍 서비스를 통해 사용자들이
     - [ ] 게시글 제목 및 내용을 통한 검색
     - [ ] 태그, 평점, 댓글 개수, 찜 개수 등을 통한 필터링 검색  
 
-## *DB 구조*  
+## :hammer: *DB 구조*  
 ![project ERD](img/Limu_ERD_3.png)
