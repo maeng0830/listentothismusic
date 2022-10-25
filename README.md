@@ -13,6 +13,9 @@ youtube music, melon 등 음악 스트리밍 서비스를 통해 사용자들이
 ## :hammer: *사용 기술 스택*
 <div align="center">
   <img src="https://img.shields.io/badge/spring boot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">
+  <img src="https://img.shields.io/badge/spring Security-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white">
+  <img src="https://img.shields.io/badge/spring JPA-6DB33F?style=for-the-badge&logo=&logoColor=white">
+  <br>
   <img src="https://img.shields.io/badge/thymeleaf-005F0F?style=for-the-badge&logo=thymeleaf&logoColor=white">
   <img src="https://img.shields.io/badge/mariadb-003545?style=for-the-badge&logo=mariadb&logoColor=white">
   <br>
@@ -28,7 +31,7 @@ youtube music, melon 등 음악 스트리밍 서비스를 통해 사용자들이
 
 관리자와 일반 회원이 공통 기능을 사용할 수 있으며, 관리자에게 추가 기능을 부여하고자 한다.
 
-그 외 주요 서비스 기능으로는 검색 기능이 있다.
+그 외 주요 서비스 기능으로는 '필터링을 통한 음악 검색 기능', '오늘 날씨와 어울리는 음악 추천 기능'이 있다.
 
 ### 1. 관리자 기능
 
@@ -55,8 +58,6 @@ youtube music, melon 등 음악 스트리밍 서비스를 통해 사용자들이
     - [ ] 게시글 등록, 삭제, 수정 기능
 - **댓글 기능**
     - [ ] 게시글 댓글 기능 (의견, 평점)
-- **찜 기능**
-    - [ ] 사용자가 다른 회원 또는 게시글을 찜 할 경우, 찜한 게시글 목록을 확인하거나 다른 회원의 게시글을 확인할 수 있는 기능
 - **신고 기능**
     - [ ] 타인의 게시글, 댓글을 신고하는 기능
 - **쪽지 기능**
@@ -66,9 +67,11 @@ youtube music, melon 등 음악 스트리밍 서비스를 통해 사용자들이
 
 ### 3. 그 외 서비스 기능
 
-- **검색 기능**
+- **필터링 검색**
     - [ ] 게시글 제목 및 내용을 통한 검색
-    - [ ] 태그, 평점, 댓글 개수, 찜 개수 등을 통한 필터링 검색  
-
+    - [ ] 태그, 평점, 댓글 개수 등을 통한 필터링 검색
+- **오늘 날씨에 어울리는 음악 추천**
+  - [ ] 날씨 openAPI를 통해 오늘 날씨 데이터를 수집
+  - [ ] 오늘 날씨에 어울리는 음악 추천 목록 제공
 ## :hammer: *DB 구조*  
 ![project ERD](img/Limu_ERD_3.png)
