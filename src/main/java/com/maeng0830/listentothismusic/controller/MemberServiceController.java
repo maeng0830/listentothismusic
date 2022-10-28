@@ -33,14 +33,14 @@ public class MemberServiceController {
         return "admin page";
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "/login";
+    @GetMapping("/login-form")
+    public String loginForm() {
+        return "/login-form";
     }
 
-    @GetMapping("/join")
+    @GetMapping("/join-form")
     public String join() {
-        return "/join";
+        return "/join-form";
     }
 
     @PostMapping("/join-success")

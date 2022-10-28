@@ -25,6 +25,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
             .anyRequest().permitAll()
             .and()
-            .formLogin().loginPage("/login");
+            .formLogin().loginPage("/login-form")
+            .usernameParameter("email")
+            .loginProcessingUrl("/login").defaultSuccessUrl("/"); // "/login-form"을 요청해서 로그인을 하면 "/"로 이동됨. 다른 주소로 요청("/member" 등)해서 로그인을 하면 그 페이지로 이동된다.
     }
 }
