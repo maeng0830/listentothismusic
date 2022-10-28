@@ -14,8 +14,14 @@ import org.springframework.stereotype.Service;
 @Service
 public class PrincipalDetailsService implements UserDetailsService {
 
+
+    private final MemberRepository memberRepository;
+
     @Autowired
-    private MemberRepository memberRepository;
+    public PrincipalDetailsService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
+
 
     // 리턴 값은 Authentication 내부의 UserDetails에 전달된다.
     // 그리고 해당 Authentication은 Security Session 내부로 전달된다.

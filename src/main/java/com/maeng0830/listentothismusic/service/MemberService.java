@@ -18,9 +18,9 @@ public class MemberService {
 
     public void join(Member member) {
         member.setRegDtt(LocalDateTime.now());
-        member.setStatus(MemberStatusCode.STATUS_REQ);
+        member.setStatus(MemberStatusCode.REQ.toString());
         member.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));
-        member.setAuthority(MemberAuthorityCode.AUTHORITY_MEMBER);
+        member.setAuthority(MemberAuthorityCode.ROLE_MEMBER.toString());
 
         memberRepository.save(member);
     }

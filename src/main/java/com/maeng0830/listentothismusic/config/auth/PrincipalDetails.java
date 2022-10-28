@@ -12,7 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 public class PrincipalDetails implements UserDetails {
 
-    private Member member;
+    private final Member member;
 
     public PrincipalDetails(Member member) {
         this.member = member;
