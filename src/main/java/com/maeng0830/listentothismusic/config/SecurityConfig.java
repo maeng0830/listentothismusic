@@ -2,6 +2,7 @@ package com.maeng0830.listentothismusic.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -9,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
+// @EnableGlobalMethodSecurity(securedEnabled = true) // secured 어노테이션 활성화 -> 특정 요청 메소드에 대해서 필요 권한을 부여할 수 있음.
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean

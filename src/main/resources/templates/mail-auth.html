@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>회원 가입 인증 페이지</title>
+</head>
+<body>
+  <h1>회원 가입 인증 페이지</h1>
+  <hr/>
+  <div th:if="${result eq true}">
+    <p>회원 가입 인증이 완료되었습니다!</p>
+    <a href="/login-form">로그인 페이지로 이동</a>
+  </div>
+  <div th:if="${result eq false}">
+    <p>회원 가입 인증에 실패하였습니다.</p>
+  </div>
+</body>
+</html>

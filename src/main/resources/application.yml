@@ -1,6 +1,16 @@
 spring:
   profiles:
     active: local
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: kmk930831@gmail.com
+    password: lyiplkblnupbwqbu
+    properties:
+      mail:
+        smtp:
+          starttls:
+            enable: true
 
 ---
 spring:
