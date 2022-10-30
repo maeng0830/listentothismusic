@@ -23,6 +23,7 @@ public class Member {
     String email; // id
     String userName; // 이름
     String password; // 비밀번호
+    String authKey; // 인증 키
     boolean authYn; // 가입 인증 여부
     LocalDateTime regDtt; // 가입 날짜
     String status; // 상태(인증 요청, 사용, 정지, 탈퇴)
