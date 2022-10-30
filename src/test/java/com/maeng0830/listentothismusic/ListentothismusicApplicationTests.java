@@ -1,13 +1,12 @@
 package com.maeng0830.listentothismusic;
 
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
+// @ActiveProfiles("test")
 @SpringBootTest
-class ListentothismusicApplicationTests {
-
-	@Test
-	void contextLoads() {
-	}
+public abstract class ListentothismusicApplicationTests {
 
 }
