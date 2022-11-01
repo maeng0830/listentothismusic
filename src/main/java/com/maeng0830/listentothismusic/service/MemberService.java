@@ -4,6 +4,8 @@ import com.maeng0830.listentothismusic.code.memberCode.MemberAuthorityCode;
 import com.maeng0830.listentothismusic.code.memberCode.MemberStatusCode;
 import com.maeng0830.listentothismusic.config.mail.Mail;
 import com.maeng0830.listentothismusic.domain.Member;
+import com.maeng0830.listentothismusic.exception.LimuException;
+import com.maeng0830.listentothismusic.exception.errorcode.MemberErrorCode;
 import com.maeng0830.listentothismusic.repository.MemberRepository;
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -22,12 +24,17 @@ public class MemberService {
 
     // 회원 가입(db 저장, 가입 인증 메일 전송)
     public void join(Member member) {
+
+        if (memberRepository.findByEmail(member.getEmail()).isPresent()) {
+            throw new LimuException(MemberErrorCode.DUPLICATE_MEMBER_EMAIL);
+        }
+
         String uuid = UUID.randomUUID().toString();
 
         member.setRegDtt(LocalDateTime.now());
-        member.setStatus(MemberStatusCode.REQ.toString());
+        member.setStatus(MemberStatusCode.REQ);
         member.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));
-        member.setAuthority(MemberAuthorityCode.ROLE_MEMBER.toString());
+        member.setAuthority(MemberAuthorityCode.ROLE_MEMBER);
         member.setAuthKey(uuid);
         member.setAuthYn(false);
 
@@ -36,25 +43,24 @@ public class MemberService {
         String mailUrl = member.getEmail();
         String subject = "LiMu(Listen To This Music) 가입을 축하합니다!";
         String text = "<h2>LiMu(Listen To This Music) 가입을 축하합니다!</h2>"
-            + "<a target='_blank' href='http://localhost:8080/mail-auth?authKey=" + uuid + "'>가입 인증 완료하기</a>";
+            + "<a target='_blank' href='http://localhost:8080/mail-auth?authKey=" + uuid
+            + "'>가입 인증 완료하기</a>";
 
         mail.sendMail(mailUrl, subject, text);
     }
 
     // 회원 가입 인증
-    public boolean mailAuth(String uuid) {
+    public void mailAuth(String uuid) {
         Optional<Member> optionalMember = memberRepository.findByAuthKey(uuid);
 
         if (!optionalMember.isPresent()) {
-            return false;
+            throw new LimuException(MemberErrorCode.FAIL_AUTH_MEMBER_JOIN);
         } else {
             Member member = optionalMember.get();
 
             member.setAuthYn(true);
-            member.setStatus(MemberStatusCode.ING.toString());
+            member.setStatus(MemberStatusCode.ING);
             memberRepository.save(member);
-
-            return true;
         }
     }
 }

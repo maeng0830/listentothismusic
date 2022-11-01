@@ -1,6 +1,7 @@
 package com.maeng0830.listentothismusic.controller;
 
 import com.maeng0830.listentothismusic.domain.Member;
+import com.maeng0830.listentothismusic.exception.LimuException;
 import com.maeng0830.listentothismusic.service.MemberService;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,22 +36,33 @@ public class MemberServiceController {
         return "admin page";
     }
 
+    // 로그인 페이지
     @GetMapping("/login-form")
     public String loginForm() {
         return "/login-form";
     }
 
+    // 회원가입 페이지
     @GetMapping("/join-form")
     public String join() {
         return "/join-form";
     }
 
-    @PostMapping("/join-success")
-    public String joinSuccess(Member memberInput) {
+    // 회원 가입 결과(성공, 실패_중복아이디)
+    @PostMapping("/join-result")
+    public String joinResult(Model model, Member memberInput) {
 
-        memberService.join(memberInput);
+        boolean result = true;
 
-        return "/join-success";
+        try {
+            memberService.join(memberInput);
+        } catch (LimuException e) {
+            result = false;
+        }
+
+        model.addAttribute("result", result);
+
+        return "join-result";
     }
 
     // @Secured({"ROLE_MEMBER", "ROLE_ADMIN"}) 해당 요청 메소드에 멤버, 관리자 권한을 가진 사람만 접근 가능하게 간단하게 설정
@@ -59,11 +71,18 @@ public class MemberServiceController {
         return "개인 정보";
     }
 
+    // 가입 인증
     @GetMapping("/mail-auth")
     public String mailAuth(Model model, HttpServletRequest request) {
         String uuid = request.getParameter("authKey");
 
-        boolean result = memberService.mailAuth(uuid);
+        boolean result = true;
+
+        try {
+            memberService.mailAuth(uuid);
+        } catch (LimuException e) {
+            result = false;
+        }
 
         model.addAttribute("result", result);
 
