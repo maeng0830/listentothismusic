@@ -1,5 +1,6 @@
 package com.maeng0830.listentothismusic.config.mail;
 
+
 import com.maeng0830.listentothismusic.domain.Member;
 import com.maeng0830.listentothismusic.exception.LimuException;
 import com.maeng0830.listentothismusic.exception.errorcode.ErrorCode;

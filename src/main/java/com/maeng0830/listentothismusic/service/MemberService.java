@@ -29,6 +29,7 @@ public class MemberService {
             throw new LimuException(MemberErrorCode.DUPLICATE_MEMBER_EMAIL);
         }
 
+
         member.setRegDtt(LocalDateTime.now());
         member.setStatus(MemberStatusCode.REQ);
         member.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));
@@ -63,7 +64,6 @@ public class MemberService {
         String text = "<h2>아래의 링크를 눌러 .LiMu 회원 가입을 완료해주세요!</h2>"
             + "<a target='_blank' href='http://localhost:8080/mail-auth-result?authKey=" + uuid
             + "'>가입 인증 완료하기</a>";
-
         mail.sendMail(mailUrl, subject, text);
     }
 
