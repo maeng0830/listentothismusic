@@ -1,5 +1,6 @@
 package com.maeng0830.listentothismusic.config.mail;
 
+
 import com.maeng0830.listentothismusic.domain.Member;
 import com.maeng0830.listentothismusic.exception.LimuException;
 import com.maeng0830.listentothismusic.exception.errorcode.ErrorCode;
@@ -18,7 +19,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class Mail {
     private final JavaMailSender javaMailSender;
+
     private final MemberRepository memberRepository;
+
 
     public void sendMail(String mailUrl, String subject, String text) {
 
@@ -31,6 +34,7 @@ public class Mail {
                 mimeMessageHelper.setText(text, true);
             }
         };
+
 
         Optional<Member> optionalMember = memberRepository.findByEmail(mailUrl);
 

@@ -22,6 +22,7 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final Mail mail;
 
+
     // 회원 가입(db 저장, 가입 안내 메일 전송)
     public void join(Member member) {
 
@@ -32,6 +33,7 @@ public class MemberService {
         member.setRegDtt(LocalDateTime.now());
         member.setStatus(MemberStatusCode.REQ);
         member.setPassword(bCryptPasswordEncoder.encode(member.getPassword()));
+
         member.setAuthority(MemberAuthorityCode.ROLE_MEMBER);
         member.setAuthYn(false);
 
@@ -59,10 +61,12 @@ public class MemberService {
         memberRepository.save(member);
 
         String mailUrl = member.getEmail();
+
         String subject = "LiMu(Listen To This Music) 회원 가입 인증 메일";
         String text = "<h2>아래의 링크를 눌러 .LiMu 회원 가입을 완료해주세요!</h2>"
             + "<a target='_blank' href='http://localhost:8080/mail-auth-result?authKey=" + uuid
             + "'>가입 인증 완료하기</a>";
+
 
         mail.sendMail(mailUrl, subject, text);
     }

@@ -13,6 +13,7 @@ spring:
             enable: true
           auth: true
 
+
 ---
 spring:
   config:
