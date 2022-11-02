@@ -2,18 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
   <meta charset="UTF-8">
-  <title>회원 가입 인증 페이지</title>
+  <title>회원 가입 인증 결과 페이지</title>
 </head>
 <body>
-  <h1>회원 가입 인증 페이지</h1>
+  <h1>회원 가입 인증 결과 페이지</h1>
   <hr/>
   <div th:if="${result eq true}">
-    <p>인증 메일이 전송되었습니다.</p>
-    <p>가입 메일을 확인하여 인증을 완료해주세요.</p>
+    <p>회원 가입 인증이 완료되었습니다!</p>
     <a href="/">메인 페이지로 이동</a>
   </div>
   <div th:if="${result eq false}">
-    <p>이미 인증 완료된 회원 입니다.</p>
+    <p>회원 가입 인증에 실패하였습니다.</p>
+    <p th:text="${failCause}"></p>
     <a href="/">메인 페이지로 이동</a>
   </div>
 </body>
