@@ -28,6 +28,7 @@ public class Member {
     String userName; // 이름
     String password; // 비밀번호
     String authKey; // 인증 키
+    LocalDateTime sendAuthEmailDtt; // 인증 메일 발송 시간
     boolean authYn; // 가입 인증 여부
     LocalDateTime regDtt; // 가입 날짜
 
