@@ -7,6 +7,9 @@
 <body>
   <h1>메인 화면 입니다.</h1>
   <hr>
-  <a th:if="${result eq false}" href="/mail-auth">가입 인증하기</a>
+  <div th:if="${loginYn eq true}">
+    <a th:if="${authYn eq true}" href="/member/info">회원 정보</a>
+    <a th:if="${authYn eq false}" href="/mail-auth">메일 인증</a>
+  </div>
 </body>
 </html>

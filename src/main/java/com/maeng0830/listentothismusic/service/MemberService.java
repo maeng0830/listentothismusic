@@ -85,5 +85,12 @@ public class MemberService {
             memberRepository.save(member);
         }
     }
+
+    // 회원 정보 조회
+    public Member memberInfo(String email) {
+
+        return memberRepository.findByEmail(email)
+            .orElseThrow(() -> new LimuException(MemberErrorCode.NON_EXISTENT_MEMBER));
+    }
 }
 

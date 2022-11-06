@@ -26,19 +26,24 @@ public class MemberServiceController {
     // 로그인 상태, 인증 X 상태인 경우 인증 메일 요청 링크 활성화
     @GetMapping("/")
     public String main(Model model, @AuthenticationPrincipal PrincipalDetails userDetails) {
-        boolean result = true;
+        Member member = null;
 
+        boolean loginYn = false;
+        boolean authYn = false;
+
+        // 로그인 여부 확인
         if (userDetails != null) {
-            Optional<Member> optionalMember = memberRepository.findByEmail(
-                userDetails.getUsername());
-            if (optionalMember.isPresent()) {
-                if (!optionalMember.get().isAuthYn()) {
-                    result = false;
-                }
+            loginYn = true;
+            member = memberRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new LimuException(MemberErrorCode.NON_EXISTENT_MEMBER));
+            // 인증 여부 확인
+            if (member.isAuthYn()) {
+                authYn = true;
             }
         }
 
-        model.addAttribute("result", result);
+        model.addAttribute("loginYn", loginYn);
+        model.addAttribute("authYn", authYn);
 
         return "/index";
     }
@@ -96,5 +101,21 @@ public class MemberServiceController {
         memberService.mailAuth(uuid);
 
         return "/mail-auth-result";
+    }
+
+    // 멤버 정보 조회(사용자)
+    @GetMapping("/member/info")
+    public String memberInfo(Model model, @AuthenticationPrincipal PrincipalDetails userDetails) {
+        Member member = null;
+
+        if (userDetails == null) {
+            throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
+        } else {
+            member = memberService.memberInfo(userDetails.getUsername());
+        }
+
+        model.addAttribute("member", member);
+
+        return "/member/info";
     }
 }
