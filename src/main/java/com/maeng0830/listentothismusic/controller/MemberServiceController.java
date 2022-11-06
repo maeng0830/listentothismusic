@@ -3,6 +3,7 @@ package com.maeng0830.listentothismusic.controller;
 import com.maeng0830.listentothismusic.config.auth.PrincipalDetails;
 import com.maeng0830.listentothismusic.domain.Member;
 import com.maeng0830.listentothismusic.exception.LimuException;
+import com.maeng0830.listentothismusic.exception.errorcode.MemberErrorCode;
 import com.maeng0830.listentothismusic.repository.MemberRepository;
 import com.maeng0830.listentothismusic.service.MemberService;
 import java.util.Optional;
@@ -28,7 +29,8 @@ public class MemberServiceController {
         boolean result = true;
 
         if (userDetails != null) {
-            Optional<Member> optionalMember = memberRepository.findByEmail(userDetails.getUsername());
+            Optional<Member> optionalMember = memberRepository.findByEmail(
+                userDetails.getUsername());
             if (optionalMember.isPresent()) {
                 if (!optionalMember.get().isAuthYn()) {
                     result = false;
@@ -65,17 +67,9 @@ public class MemberServiceController {
 
     // 회원 가입 결과(성공, 실패_중복아이디)
     @PostMapping("/join-result")
-    public String joinResult(Model model, Member memberInput) {
+    public String joinResult(Member memberInput) {
 
-        boolean result = true;
-
-        try {
-            memberService.join(memberInput);
-        } catch (LimuException e) {
-            result = false;
-        }
-
-        model.addAttribute("result", result);
+        memberService.join(memberInput);
 
         return "join-result";
     }
@@ -83,19 +77,12 @@ public class MemberServiceController {
     // 인증 메일 전송 (이미 인증된 회원은 전송하지 않는다)
     @GetMapping("/mail-auth")
     public String mailAuth(Model model, @AuthenticationPrincipal PrincipalDetails userDetails) {
-        Optional<Member> optionalMember = memberRepository.findByEmail(userDetails.getUsername());
-
-        boolean result = true;
-
-        if (optionalMember.isPresent()) {
-            try {
-                memberService.authEmailSend(optionalMember.get());
-            } catch (LimuException e) {
-                result = false;
-            }
+        if (userDetails == null) {
+            throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
+        } else {
+            Member member = memberRepository.findByEmail(userDetails.getUsername()).orElseThrow(() -> new RuntimeException());
+            memberService.authEmailSend(member);
         }
-
-        model.addAttribute("result", result);
 
         return "/mail-auth";
     }
@@ -103,21 +90,10 @@ public class MemberServiceController {
     // 메일 인증 결과
     // 예외: 잘못된 인증 링크(authKey로 멤버 조회 불가), 이미 인증된 회원, 인증 메일 요청 후 5분 경과
     @GetMapping("/mail-auth-result")
-    public String mailAuthResult(Model model, HttpServletRequest request) {
+    public String mailAuthResult(HttpServletRequest request) {
         String uuid = request.getParameter("authKey");
 
-        boolean result = true;
-        String failCause = "";
-
-        try {
-           memberService.mailAuth(uuid);
-        } catch (LimuException e) {
-            result = false;
-            failCause = e.getErrorMessage();
-        }
-
-        model.addAttribute("result", result);
-        model.addAttribute("failCause", failCause);
+        memberService.mailAuth(uuid);
 
         return "/mail-auth-result";
     }

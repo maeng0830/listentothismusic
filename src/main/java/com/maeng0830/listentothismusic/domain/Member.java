@@ -22,22 +22,22 @@ import lombok.Setter;
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long id;
+    private Long id;
 
-    String email; // id
-    String userName; // 이름
-    String password; // 비밀번호
-    String authKey; // 인증 키
-    LocalDateTime sendAuthEmailDtt; // 인증 메일 발송 시간
-    boolean authYn; // 가입 인증 여부
-    LocalDateTime regDtt; // 가입 날짜
-
-    @Enumerated(EnumType.STRING)
-    MemberStatusCode status; // 상태(인증 요청, 사용, 정지, 탈퇴)
-
-    String phone; // 연락처
-    String nickName; // 닉네임
+    private String email; // id
+    private String userName; // 이름
+    private String password; // 비밀번호
+    private String authKey; // 인증 키
+    private LocalDateTime sendAuthEmailDtt; // 인증 메일 발송 시간
+    private boolean authYn; // 가입 인증 여부
+    private LocalDateTime regDtt; // 가입 날짜
 
     @Enumerated(EnumType.STRING)
-    MemberAuthorityCode authority; // ROLE_MEMBER, ROLE_ADMIN
+    private MemberStatusCode status; // 상태(인증 요청, 사용, 정지, 탈퇴)
+
+    private String phone; // 연락처
+    private String nickName; // 닉네임
+
+    @Enumerated(EnumType.STRING)
+    private MemberAuthorityCode authority; // ROLE_MEMBER, ROLE_ADMIN
 }
