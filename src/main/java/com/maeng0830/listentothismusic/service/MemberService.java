@@ -3,12 +3,14 @@ package com.maeng0830.listentothismusic.service;
 import com.maeng0830.listentothismusic.code.memberCode.MemberAuthorityCode;
 import com.maeng0830.listentothismusic.code.memberCode.MemberStatusCode;
 import com.maeng0830.listentothismusic.config.Constants;
+import com.maeng0830.listentothismusic.config.auth.PrincipalDetails;
 import com.maeng0830.listentothismusic.config.mail.CreateMail;
 import com.maeng0830.listentothismusic.domain.Member;
 import com.maeng0830.listentothismusic.exception.LimuException;
 import com.maeng0830.listentothismusic.exception.errorcode.MemberErrorCode;
 import com.maeng0830.listentothismusic.repository.MemberRepository;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -91,6 +93,17 @@ public class MemberService {
 
         return memberRepository.findByEmail(email)
             .orElseThrow(() -> new LimuException(MemberErrorCode.NON_EXISTENT_MEMBER));
+    }
+
+    // 회원 정보 수정
+    public void memberInfoMod(Member memberInput) {
+        Member member = memberRepository.findByEmail(memberInput.getEmail())
+            .orElseThrow(() -> new LimuException(MemberErrorCode.NON_EXISTENT_MEMBER));
+
+        member.setNickName(memberInput.getNickName());
+        member.setPhone(memberInput.getPhone());
+
+        memberRepository.save(member);
     }
 }
 
