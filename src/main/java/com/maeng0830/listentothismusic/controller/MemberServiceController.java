@@ -103,7 +103,7 @@ public class MemberServiceController {
         return "/mail-auth-result";
     }
 
-    // 멤버 정보 조회(사용자)
+    // 회원 정보 조회(사용자)
     @GetMapping("/member/info")
     public String memberInfo(Model model, @AuthenticationPrincipal PrincipalDetails userDetails) {
         Member member = null;
@@ -117,5 +117,14 @@ public class MemberServiceController {
         model.addAttribute("member", member);
 
         return "/member/info";
+    }
+
+    // 회원 정보 수정(사용자)
+    @PostMapping("/member/info")
+    public String memberInfoMod(Member memberInput) {
+
+        memberService.memberInfoMod(memberInput);
+
+        return "redirect:/member/info";
     }
 }
