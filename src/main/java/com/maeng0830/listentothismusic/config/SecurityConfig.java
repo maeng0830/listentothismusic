@@ -21,10 +21,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
+        http.headers().frameOptions().disable(); // h2 연결 에러
 
         http.authorizeRequests()
             .antMatchers("/member/**").authenticated()
             .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
+            .antMatchers("/h2-console/**").permitAll() // h2 연결 에러
             .anyRequest().permitAll()
             .and()
             .formLogin().loginPage("/login-form")

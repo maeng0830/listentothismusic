@@ -15,7 +15,7 @@
       <th>회원 아이디</th>
       <th>회원 이름</th>
     </tr>
-    <tr th:each="member: ${members}">
+    <tr th:each="member: ${memberList}">
       <td th:text="${member.id}"></td>
       <td th:text="${member.email}"></td>
       <td th:text="${member.userName}"></td>
@@ -24,30 +24,31 @@
 
   <nav aria-label="Search results pages">
     <ul class="pagination">
-      <li class="page-item" >
-        <a class="page-link" th:href="@{/admin/member-list(page=1)}" aria-label="First">
+      <!--첫번째 페이지로 -->
+      <li class="page-item" th:classappend="${pageNumber < pageSize} ? 'disabled'">
+        <a class="page-link" th:href="@{/admin/member-list(page=0)}" aria-label="First">
           <span aria-hidden="true">First</span>
         </a>
       </li>
-
-      <li class="page-item" th:classappend="${members.first} ? 'disabled'">
-        <a class="page-link" th:href="${members.first} ? '#' : @{/admin/member-list(page=${members.number})}" aria-label="Previous">
+      <!--이전 페이지로-->
+      <li class="page-item" th:classappend="${memberList.first} ? 'disabled'">
+        <a class="page-link" th:href="${memberList.first} ? '#' : @{/admin/member-list(page=${pageNumber - 1})}" aria-label="Previous">
           <span aria-hidden="true">&laquo;</span>
         </a>
       </li>
-
-      <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}" th:classappend="${page == members.number + 1} ? 'active'">
-        <a class="page-link" th:text="${page}" th:href="@{/admin/member-list(page=${page})}"></a>
+      <!--특정 페이지로-->
+      <li class="page-item" th:each="page: ${#numbers.sequence(start, last)}" th:classappend="${page == pageNumber + 1} ? 'active'">
+        <a class="page-link" th:text="${page}" th:href="@{/admin/member-list(page=${page - 1})}"></a>
       </li>
-
-      <li class="page-item" th:classappend="${members.last} ? 'disabled'">
-        <a class="page-link" th:href="${members.last} ? '#' : @{/admin/member-list(page=${members.number + 2})}" aria-label="Next">
+      <!--다음 페이지로-->
+      <li class="page-item" th:classappend="${memberList.last} ? 'disabled'">
+        <a class="page-link" th:href="${memberList.last} ? '#' : @{/admin/member-list(page=${pageNumber + 1})}" aria-label="Next">
           <span aria-hidden="true">&raquo;</span>
         </a>
       </li>
-
-      <li class="page-item">
-        <a class="page-link" th:href="@{/admin/member-list(page=${members.totalPages})}" aria-label="Last">
+      <!--마지막 페이지로-->
+      <li class="page-item" th:classappend="${start + pageSize > totalPages} ? 'disabled'">
+        <a class="page-link" th:href="@{/admin/member-list(page=${memberList.totalPages - 1})}" aria-label="Last">
           <span aria-hidden="true">Last</span>
         </a>
       </li>
