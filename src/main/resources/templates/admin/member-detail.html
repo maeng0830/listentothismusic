@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>회원 상세 정보 페이지</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+<body>
+  <h1>회원 상세 정보 페이지</h1>
+  <hr>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">회원 번호</th>
+        <th scope="col">회원 아이디</th>
+        <th scope="col">회원 가입일</th>
+        <th scope="col">회원 이름</th>
+        <th scope="col">연락처</th>
+        <th scope="col">닉네임</th>
+        <th scope="col">회원 상태</th>
+        <th scope="col">회원 권한</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th scope="row" th:text="${member.id}"></th>
+        <td th:text="${member.email}"></td>
+        <td th:text="${member.regDtt}"></td>
+        <td th:text="${member.userName}"></td>
+        <td th:text="${member.phone}"></td>
+        <td th:text="${member.nickName}"></td>
+        <td>
+          <p th:text="${'현재 상태: ' + member.status}"></p>
+          <form action="/admin/member-detail" method="post">
+            <input th:value="${member.email}" type="hidden" name="email">
+            <select name="status">
+              <option value="none">== 선택 ==</option>
+              <option value="REQ">인증 요청 상태</option>
+              <option value="ING">활성 상태</option>
+              <option value="STOP">정지 상태</option>
+              <option value="WITHDRAW">탈퇴 상태</option>
+            </select>
+            <button type="submit">회원 상태 수정</button>
+          </form>
+        </td>
+        <td th:text="${member.authority}"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <a class="btn btn-secondary" href="/admin/member-list" role="button">회원 목록으로</a>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</body>
+</html>

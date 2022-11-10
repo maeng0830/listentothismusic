@@ -1,2 +1,2 @@
-INSERT INTO member (email, nick_name, auth_yn) values
-                                         ('member1@naver.com', 'member1', false);
+INSERT INTO member (email, nick_name, auth_yn, authority, password) values
+                                         ('admin@naver.com', 'member1', true, 'ROLE_ADMIN', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6');
