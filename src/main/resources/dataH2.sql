@@ -1,2 +1,17 @@
-INSERT INTO member (email, nick_name, auth_yn, authority, password) values
-                                         ('admin@naver.com', 'member1', true, 'ROLE_ADMIN', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6');
+INSERT INTO member (reg_dtt, email, phone, user_name, nick_name, auth_yn, authority, password) values
+                                         ('2022-10-28 21:43:44.727000', 'admin@naver.com', '01099999999', 'admin1', 'admin1Nickname', true, 'ROLE_ADMIN', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6'),
+                                         ('2022-10-28 21:43:44.727000', 'member1@naver.com', '01099999999', 'member1', 'member1Nickname', true, 'ROLE_MEMBER', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6'),
+                                         ('2022-10-28 21:43:44.727000', 'member2@naver.com', '01099999999', 'member2', 'member2Nickname', true, 'ROLE_MEMBER', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6'),
+                                         ('2022-10-28 21:43:44.727000', 'member3@naver.com', '01099999999', 'member3', 'member3Nickname', true, 'ROLE_MEMBER', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6'),
+                                         ('2022-10-28 21:43:44.727000', 'member4@naver.com', '01099999999', 'member4', 'member4Nickname', true, 'ROLE_MEMBER', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6'),
+                                         ('2022-10-28 21:43:44.727000', 'member5@naver.com', '01099999999', 'member5', 'member5Nickname', true, 'ROLE_MEMBER', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6'),
+                                         ('2022-10-28 21:43:44.727000', 'member6@naver.com', '01099999999', 'member6', 'member6Nickname', true, 'ROLE_MEMBER', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6'),
+                                         ('2022-10-28 21:43:44.727000', 'member7@naver.com', '01099999999', 'member7', 'member7Nickname', true, 'ROLE_MEMBER', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6'),
+                                         ('2022-10-28 21:43:44.727000', 'member8@naver.com', '01099999999', 'member8', 'member8Nickname', true, 'ROLE_MEMBER', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6'),
+                                         ('2022-10-28 21:43:44.727000', 'member9@naver.com', '01099999999', 'member9', 'member9Nickname', true, 'ROLE_MEMBER', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6'),
+                                         ('2022-10-28 21:43:44.727000', 'member10@naver.com', '01099999999', 'member10', 'member10Nickname', true, 'ROLE_MEMBER', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6'),
+                                         ('2022-10-28 21:43:44.727000', 'member11@naver.com', '01099999999', 'member11', 'member11Nickname', true, 'ROLE_MEMBER', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6'),
+                                         ('2022-10-28 21:43:44.727000', 'member12@naver.com', '01099999999', 'member12', 'member12Nickname', true, 'ROLE_MEMBER', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6'),
+                                         ('2022-10-28 21:43:44.727000', 'member13@naver.com', '01099999999', 'member13', 'member13Nickname', true, 'ROLE_MEMBER', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6'),
+                                         ('2022-10-28 21:43:44.727000', 'member14@naver.com', '01099999999', 'member14', 'member14Nickname', true, 'ROLE_MEMBER', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6'),
+                                         ('2022-10-28 21:43:44.727000', 'member15@naver.com', '01099999999', 'member15', 'member15Nickname', true, 'ROLE_MEMBER', '$2a$10$5/d8MenInOGIZ8uKjptHj.LkIzsVO3KIDj59NlrIbvpcjjHnoe0E6');

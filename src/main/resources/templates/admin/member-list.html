@@ -9,17 +9,21 @@
 <body>
   <h1>회원 목록 페이지</h1>
   <hr>
-  <table>
-    <tr>
-      <th>회원 번호</th>
-      <th>회원 아이디</th>
-      <th>회원 이름</th>
-    </tr>
-    <tr th:each="member: ${memberList}">
-      <td th:text="${member.id}"></td>
-      <td><a th:text="${member.email}" th:href="${'/admin/member-detail?email=' + member.email}"></a></td>
-      <td th:text="${member.userName}"></td>
-    </tr>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">회원 번호</th>
+        <th scope="col">회원 아이디</th>
+        <th scope="col">회원 이름</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr th:each="member: ${memberList}">
+        <th scope="row" th:text="${member.id}"></th>
+        <td><a th:text="${member.email}" th:href="${'/admin/member-detail?email=' + member.email}"></a></td>
+        <td th:text="${member.userName}"></td>
+      </tr>
+    </tbody>
   </table>
 
   <nav aria-label="Search results pages">
