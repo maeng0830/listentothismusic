@@ -10,6 +10,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
@@ -38,5 +40,22 @@ public class AdminServiceController {
         model.addAttribute("totalPages", totalPages);
 
         return "/admin/member-list";
+    }
+
+    @GetMapping("/admin/member-detail")
+    public String viewMemberDetail(Model model, @RequestParam String email) {
+
+        Member member = adminService.viewMemberDetail(email);
+
+        model.addAttribute("member", member);
+
+        return "/admin/member-detail";
+    }
+
+    @PostMapping("/admin/member-detail")
+    public String modMemberInfo(Member member) {
+        adminService.modMemberInfo(member.getEmail(), member.getStatus().toString());
+
+        return "redirect:/admin/member-detail?email=" + member.getEmail();
     }
 }

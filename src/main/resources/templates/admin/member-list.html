@@ -17,7 +17,7 @@
     </tr>
     <tr th:each="member: ${memberList}">
       <td th:text="${member.id}"></td>
-      <td th:text="${member.email}"></td>
+      <td><a th:text="${member.email}" th:href="${'/admin/member-detail?email=' + member.email}"></a></td>
       <td th:text="${member.userName}"></td>
     </tr>
   </table>
