@@ -17,15 +17,82 @@
 
   <main role="main" class="container">
     <form action="/post/write" method="post">
-      <div>
-        <input type="text" name="title" placeholder="제목을 입력하세요." required>
+      <!-- 제목 -->
+      <div class="input-group input-group-lg">
+        <div class="input-group-prepend">
+          <span class="input-group-text" id="basic-addon1">제목</span>
+        </div>
+        <input type="text" class="form-control" name="title" placeholder="제목을 입력해주세요." aria-label="title" aria-describedby="basic-addon1" required>
       </div>
-      <textarea id="summernote" name="content" placeholder="내용을 입력하세요." required></textarea>
-      <script>
-        $(document).ready(function() {
-          $('#summernote').summernote();
-        });
-      </script>
+      <!-- 음악 정보 -->
+      <div class="row g-2">
+        <div class="col-md">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="floatingInputGrid1" name="musicTitle" placeholder="음악 제목을 입력해주세요." required>
+            <label for="floatingInputGrid1"></label>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="form-floating">
+            <input type="text" class="form-control" id="floatingInputGrid2" name="artist" placeholder="음악 아티스트를 입력해주세요." required>
+            <label for="floatingInputGrid2"></label>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="form-floating">
+            <input type="url" class="form-control" id="floatingInputGrid3" name="musicLink" placeholder="음악 링크(유튜브)를 입력해주세요." required>
+            <label for="floatingInputGrid3"></label>
+          </div>
+        </div>
+      </div>
+      <!-- 태그 -->
+      <div class="row g-2">
+        <div class="col-md">
+          <div class="form-floating">
+            <label for="exampleFormControlSelect1"></label>
+            <select class="form-control" id="exampleFormControlSelect1">
+              <option selected>== 장르 ==</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="form-floating">
+            <label for="exampleFormControlSelect1"></label>
+            <select class="form-control" id="exampleFormControlSelect2">
+              <option selected>== 분위기 ==</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="form-floating">
+            <label for="exampleFormControlSelect1"></label>
+            <select class="form-control" id="exampleFormControlSelect3">
+              <option selected>== 날씨 ==</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!-- 서머노트 -->
+      <div>
+        <textarea id="summernote" name="content" placeholder="내용을 입력하세요." required></textarea>
+        <script>
+          $(document).ready(function() {
+            $('#summernote').summernote();
+          });
+        </script>
+      </div>
       <div>
         <button class="btn btn-primary" style="width: 10%; padding: 5px;" type="submit">게시</button>
       </div>
