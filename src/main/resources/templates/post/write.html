@@ -50,36 +50,27 @@
         <div class="col-md">
           <div class="form-floating">
             <label for="exampleFormControlSelect1"></label>
-            <select class="form-control" id="exampleFormControlSelect1">
-              <option selected>== 장르 ==</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
+            <select class="form-control" id="exampleFormControlSelect1" name="genre">
+              <option selected value="">== 장르 ==</option>
+              <option th:each="genre: ${genreTagList}" th:text="${genre.getValue()}" th:value="${genre.name()}"></option>
             </select>
           </div>
         </div>
         <div class="col-md">
           <div class="form-floating">
-            <label for="exampleFormControlSelect1"></label>
-            <select class="form-control" id="exampleFormControlSelect2">
-              <option selected>== 분위기 ==</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
+            <label for="exampleFormControlSelect2"></label>
+            <select class="form-control" id="exampleFormControlSelect2" name="mood">
+              <option selected value="">== 분위기 ==</option>
+              <option th:each="mood: ${moodTagList}" th:text="${mood.getValue()}" th:value="${mood.name()}"></option>
             </select>
           </div>
         </div>
         <div class="col-md">
           <div class="form-floating">
-            <label for="exampleFormControlSelect1"></label>
-            <select class="form-control" id="exampleFormControlSelect3">
-              <option selected>== 날씨 ==</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
+            <label for="exampleFormControlSelect3"></label>
+            <select class="form-control" id="exampleFormControlSelect3" name="weather">
+              <option selected value="">== 날씨 ==</option>
+              <option th:each="weather: ${weatherTagList}" th:text="${weather.getValue()}" th:value="${weather.name()}"></option>
             </select>
           </div>
         </div>

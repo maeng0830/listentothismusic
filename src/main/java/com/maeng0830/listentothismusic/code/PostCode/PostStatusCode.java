@@ -1,8 +1,8 @@
-package com.maeng0830.listentothismusic.code.memberCode;
+package com.maeng0830.listentothismusic.code.PostCode;
 
 import lombok.Getter;
 
-// 회원 상태 코드
+// 게시글 상태 코드
 @Getter
 public enum PostStatusCode {
     POST,
