@@ -1,6 +1,6 @@
 package com.maeng0830.listentothismusic.service;
 
-import com.maeng0830.listentothismusic.code.memberCode.PostStatusCode;
+import com.maeng0830.listentothismusic.code.PostCode.PostStatusCode;
 import com.maeng0830.listentothismusic.domain.Post;
 import com.maeng0830.listentothismusic.repository.PostRepository;
 import java.time.LocalDateTime;
@@ -23,6 +23,9 @@ public class PostService {
             .musicTitle(post.getMusicTitle())
             .artist(post.getArtist())
             .musicLink(post.getMusicLink())
+            .genre(post.getGenre())
+            .mood(post.getMood())
+            .weather(post.getWeather())
             .postStatus(PostStatusCode.POST)
             .build());
     }
