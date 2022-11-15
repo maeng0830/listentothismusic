@@ -29,13 +29,15 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 글 번호
 
-    private String writer; // 작성자
+    private String writerEmail; // 작성자 이메일
+    private String writerNickName; // 작성자 닉네임
 
     private String title; // 글 제목
     @Lob
     private String content; // 본문
 
     private String musicLink; // 음악 링크
+    private String youtubeUniqueCode; // 유튜브 영상 고유 코드
     private String musicTitle; // 음악 제목
     private String artist; // 아티스트명
 

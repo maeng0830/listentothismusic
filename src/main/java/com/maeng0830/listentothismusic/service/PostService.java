@@ -1,7 +1,10 @@
 package com.maeng0830.listentothismusic.service;
 
 import com.maeng0830.listentothismusic.code.PostCode.PostStatusCode;
+import com.maeng0830.listentothismusic.domain.Member;
 import com.maeng0830.listentothismusic.domain.Post;
+import com.maeng0830.listentothismusic.exception.LimuException;
+import com.maeng0830.listentothismusic.exception.errorcode.PostErrorCode;
 import com.maeng0830.listentothismusic.repository.PostRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +19,12 @@ public class PostService {
     private final PostRepository postRepository;
 
     // 게시글 등록
-    public void writePost(String email, Post post) {
+    public void writePost(Member member, Post post) {
 
         postRepository.save(Post.builder()
             .postDtt(LocalDateTime.now())
-            .writer(email)
+            .writerEmail(member.getEmail())
+            .writerNickName(member.getNickName())
             .title(post.getTitle())
             .content(post.getContent())
             .musicTitle(post.getMusicTitle())
@@ -33,8 +37,21 @@ public class PostService {
             .build());
     }
 
-    // 게시글 조회
+    // 게시글 목록 조회
     public Page<Post> viewPostList(Pageable pageable) {
         return postRepository.findAll(pageable);
+    }
+
+    // 게시글 상세 조회
+    public Post readPost(Long id) {
+        Post post = postRepository.findById(id)
+            .orElseThrow(() -> new LimuException(PostErrorCode.NON_EXISTENT_POST));
+
+        if (post.getPostStatus().equals(PostStatusCode.REPORT) || post.getPostStatus()
+            .equals(PostStatusCode.DELETE)) {
+            throw new LimuException(PostErrorCode.NON_VALIDATED_POST);
+        }
+
+        return post;
     }
 }
