@@ -23,6 +23,7 @@ public class PostServiceController {
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
 
+    // 게시글 등록 api(get)
     @GetMapping("/post/write")
     public String writePost(Model model, @AuthenticationPrincipal PrincipalDetails userDetails) {
 
@@ -39,6 +40,7 @@ public class PostServiceController {
         return "/post/write";
     }
 
+    // 게시글 등록 api(post)
     @PostMapping("/post/write")
     public String writePost(@AuthenticationPrincipal PrincipalDetails userDetails, Post post) {
         if (userDetails == null) {
@@ -51,4 +53,10 @@ public class PostServiceController {
 
         return "redirect:/";
     }
+
+    // 게시글 조회 api
+
+    // 게시글 수정 api(get)
+
+    // 게시글 수정 api(post)
 }

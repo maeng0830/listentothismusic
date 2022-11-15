@@ -13,6 +13,7 @@ public class PostService {
 
     private final PostRepository postRepository;
 
+    // 게시글 등록
     public void writePost(String email, Post post) {
 
         postRepository.save(Post.builder()
@@ -29,4 +30,6 @@ public class PostService {
             .postStatus(PostStatusCode.POST)
             .build());
     }
+
+
 }
