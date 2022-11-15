@@ -19,6 +19,7 @@ public class AdminServiceController {
 
     private final AdminService adminService;
 
+    // 회원 목록 조회 api
     @GetMapping("/admin/member-list")
     public String viewMemberList(Model model, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Member> memberList = adminService.viewMemberList(pageable);
