@@ -2,6 +2,7 @@ package com.maeng0830.listentothismusic.controller;
 
 import com.maeng0830.listentothismusic.code.PostCode.TagCode;
 import com.maeng0830.listentothismusic.config.auth.PrincipalDetails;
+import com.maeng0830.listentothismusic.domain.Member;
 import com.maeng0830.listentothismusic.domain.Post;
 import com.maeng0830.listentothismusic.exception.LimuException;
 import com.maeng0830.listentothismusic.exception.errorcode.MemberErrorCode;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 @Controller
@@ -47,14 +49,31 @@ public class PostServiceController {
             throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
         }
 
-        memberRepository.findByEmail(userDetails.getUsername()).orElseThrow(() -> new LimuException(MemberErrorCode.NON_EXISTENT_MEMBER));
+        Member member = memberRepository.findByEmail(userDetails.getUsername())
+            .orElseThrow(() -> new LimuException(MemberErrorCode.NON_EXISTENT_MEMBER));
 
-        postService.writePost(userDetails.getUsername(), post);
+        postService.writePost(member, post);
 
         return "redirect:/";
     }
 
-    // 게시글 조회 api
+    // 게시글 상세 조회 api
+    @GetMapping("/post/read")
+    public String readPost(Model model, @RequestParam Long id, @AuthenticationPrincipal PrincipalDetails userDetails) {
+
+        Post post = postService.readPost(id);
+
+        boolean writerYn = false;
+
+        if (post.getWriterEmail().equals(userDetails.getUsername())) {
+            writerYn = true;
+        }
+
+        model.addAttribute("writerYn", writerYn);
+        model.addAttribute("post", post);
+
+        return "/post/read";
+    }
 
     // 게시글 수정 api(get)
 

@@ -32,7 +32,7 @@
       <tr th:each="post: ${postList}">
         <th scope="row" th:text="${post.id}"></th>
         <td><a th:text="${post.title}" th:href="${'/post/read?id=' + post.id}"></a><br><p th:text="${post.genre.getValue()} + ' ' + ${post.mood.getValue()} + ' ' + ${post.weather.getValue()}"></p></td>
-        <td th:text="${post.writer}"></td>
+        <td th:text="${post.writerNickName}"></td>
         <td th:text="${post.postDtt}"></td>
       </tr>
     </tbody>
