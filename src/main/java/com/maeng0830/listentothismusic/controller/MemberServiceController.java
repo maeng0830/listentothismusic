@@ -2,13 +2,21 @@ package com.maeng0830.listentothismusic.controller;
 
 import com.maeng0830.listentothismusic.config.auth.PrincipalDetails;
 import com.maeng0830.listentothismusic.domain.Member;
+import com.maeng0830.listentothismusic.domain.Post;
 import com.maeng0830.listentothismusic.exception.LimuException;
 import com.maeng0830.listentothismusic.exception.errorcode.MemberErrorCode;
 import com.maeng0830.listentothismusic.repository.MemberRepository;
+import com.maeng0830.listentothismusic.repository.PostRepository;
 import com.maeng0830.listentothismusic.service.MemberService;
+import com.maeng0830.listentothismusic.service.PostService;
+import java.util.List;
 import java.util.Optional;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,11 +29,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class MemberServiceController {
 
     private final MemberService memberService;
+    private final PostService postService;
     private final MemberRepository memberRepository;
+    private final PostRepository postRepository;
 
     // 로그인 상태, 인증 X 상태인 경우 인증 메일 요청 링크 활성화
     @GetMapping("/")
-    public String main(Model model, @AuthenticationPrincipal PrincipalDetails userDetails) {
+    public String main(Model model, @AuthenticationPrincipal PrincipalDetails userDetails, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Member member = null;
 
         boolean loginYn = false;
@@ -44,6 +54,23 @@ public class MemberServiceController {
 
         model.addAttribute("loginYn", loginYn);
         model.addAttribute("authYn", authYn);
+
+        Page<Post> postList = postService.viewPostList(pageable);
+
+        double start = Math.floor((postList.getPageable().getPageNumber() / postList.getPageable().getPageSize())
+            * postList.getPageable().getPageSize() + 1);
+        double last = start + postList.getPageable().getPageSize() - 1 < postList.getTotalPages()
+            ? start + postList.getPageable().getPageSize() - 1 : postList.getTotalPages();
+        int pageNumber = postList.getPageable().getPageNumber();
+        int pageSize = postList.getPageable().getPageSize();
+        int totalPages = postList.getTotalPages();
+
+        model.addAttribute("postList", postList);
+        model.addAttribute("start", start);
+        model.addAttribute("last", last);
+        model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("totalPages", totalPages);
 
         return "/index";
     }

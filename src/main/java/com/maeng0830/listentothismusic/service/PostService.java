@@ -5,6 +5,8 @@ import com.maeng0830.listentothismusic.domain.Post;
 import com.maeng0830.listentothismusic.repository.PostRepository;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -31,5 +33,8 @@ public class PostService {
             .build());
     }
 
-
+    // 게시글 조회
+    public Page<Post> viewPostList(Pageable pageable) {
+        return postRepository.findAll(pageable);
+    }
 }
