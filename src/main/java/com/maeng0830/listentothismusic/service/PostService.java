@@ -6,6 +6,7 @@ import com.maeng0830.listentothismusic.domain.Post;
 import com.maeng0830.listentothismusic.exception.LimuException;
 import com.maeng0830.listentothismusic.exception.errorcode.PostErrorCode;
 import com.maeng0830.listentothismusic.repository.PostRepository;
+import com.maeng0830.listentothismusic.util.YoutubeViewTag;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,9 @@ public class PostService {
     // 게시글 등록
     public void writePost(Member member, Post post) {
 
+        String[] linkArr = post.getMusicLink().split("/");
+        String uniqueCode = linkArr[linkArr.length - 1];
+
         postRepository.save(Post.builder()
             .postDtt(LocalDateTime.now())
             .writerEmail(member.getEmail())
@@ -30,6 +34,8 @@ public class PostService {
             .musicTitle(post.getMusicTitle())
             .artist(post.getArtist())
             .musicLink(post.getMusicLink())
+            .youtubeUniqueCode(uniqueCode)
+            .youtubeViewTag(YoutubeViewTag.createYoutubeTag(uniqueCode))
             .genre(post.getGenre())
             .mood(post.getMood())
             .weather(post.getWeather())
