@@ -1,6 +1,7 @@
 package com.maeng0830.listentothismusic.service;
 
 import com.maeng0830.listentothismusic.code.PostCode.PostStatusCode;
+import com.maeng0830.listentothismusic.config.auth.PrincipalDetails;
 import com.maeng0830.listentothismusic.domain.Member;
 import com.maeng0830.listentothismusic.domain.Post;
 import com.maeng0830.listentothismusic.exception.LimuException;
@@ -45,10 +46,11 @@ public class PostService {
 
     // 게시글 목록 조회
     public Page<Post> viewPostList(Pageable pageable) {
-        return postRepository.findAll(pageable);
+        return postRepository.findByPostStatus(PostStatusCode.POST, pageable);
     }
 
     // 게시글 상세 조회
+    // 조회수 증가 기능 포함
     public Post readPost(Long id) {
         Post post = postRepository.findById(id)
             .orElseThrow(() -> new LimuException(PostErrorCode.NON_EXISTENT_POST));
@@ -58,6 +60,73 @@ public class PostService {
             throw new LimuException(PostErrorCode.NON_VALIDATED_POST);
         }
 
+        // 조회수 증가
+        post.setHits(post.getHits() + 1);
+        postRepository.save(post);
+
         return post;
+    }
+
+    // 게시글 수정
+    public Post modPost(Long id, String userEmail, Post postInput) {
+
+        Post post = postRepository.findById(id)
+            .orElseThrow(() -> new LimuException(PostErrorCode.NON_EXISTENT_POST));
+
+        if (post.getPostStatus().equals(PostStatusCode.DELETE)) {
+            throw new LimuException(PostErrorCode.NON_VALIDATED_POST);
+        }
+
+        if (!post.getWriterEmail().equals(userEmail)) {
+            throw new LimuException(PostErrorCode.NOT_AUTHORITY);
+        }
+
+        String[] linkArr = post.getMusicLink().split("/");
+        String uniqueCode = linkArr[linkArr.length - 1];
+
+        post.setTitle(postInput.getTitle());
+        post.setMusicTitle(postInput.getMusicTitle());
+        post.setArtist(postInput.getArtist());
+        post.setMusicLink(postInput.getMusicLink());
+        post.setGenre(postInput.getGenre());
+        post.setMood(postInput.getMood());
+        post.setWeather(postInput.getWeather());
+        post.setContent(postInput.getContent());
+        post.setYoutubeUniqueCode(uniqueCode);
+        post.setYoutubeViewTag(YoutubeViewTag.createYoutubeTag(uniqueCode));
+
+        postRepository.save(post);
+
+        return post;
+    }
+
+    // 게시글 삭제
+    public void deletePost(Long id, String userEmail) {
+        Post post = postRepository.findById(id)
+            .orElseThrow(() -> new LimuException(PostErrorCode.NON_EXISTENT_POST));
+
+        if (post.getPostStatus().equals(PostStatusCode.DELETE)) {
+            throw new LimuException(PostErrorCode.NON_VALIDATED_POST);
+        }
+
+        if (!post.getWriterEmail().equals(userEmail)) {
+            throw new LimuException(PostErrorCode.NOT_AUTHORITY);
+        }
+
+        post.setPostStatus(PostStatusCode.DELETE);
+
+        postRepository.save(post);
+    }
+
+    // 게시글 신고
+    public void reportPost(Long id, String reportReason) {
+        Post post = postRepository.findById(id)
+            .orElseThrow(() -> new LimuException(PostErrorCode.NON_EXISTENT_POST));
+
+        post.setPostStatus(PostStatusCode.REPORT);
+        post.setReportReason(reportReason);
+        post.setReportDtt(LocalDateTime.now());
+
+        postRepository.save(post);
     }
 }

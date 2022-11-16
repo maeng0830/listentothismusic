@@ -52,6 +52,8 @@ public class Post {
 
     private LocalDateTime postDtt; // 작성 일시
 
+    private long hits; // 조회수
+
     private LocalDateTime reportDtt; // 신고 일시
     private String reportReason; // 신고 사유
     @Enumerated(EnumType.STRING)
