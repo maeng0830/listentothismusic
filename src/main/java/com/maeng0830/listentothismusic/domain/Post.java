@@ -38,6 +38,7 @@ public class Post {
 
     private String musicLink; // 음악 링크
     private String youtubeUniqueCode; // 유튜브 영상 고유 코드
+    private String youtubeViewTag; // '유뷰트 영상 -> 게시글 본문'을 위한 태그
     private String musicTitle; // 음악 제목
     private String artist; // 아티스트명
 

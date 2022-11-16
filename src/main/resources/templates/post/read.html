@@ -37,11 +37,12 @@
           </div>
           <div class="mb-3">
             <label for="content" class="form-label">본문</label>
-            <div th:utext="${post.content}" class="form-control" id="content"></div>
+            <div style="height: auto;" th:utext="${post.youtubeViewTag} + '<br>' + ${post.content}" class="form-control" id="content"></div>
           </div>
           <a href="/" class="btn btn-outline-secondary">목록으로</a>
           <a th:if="${writerYn eq true}" href="#" class="btn btn-outline-warning">수정하기</a>
           <a th:if="${writerYn eq true}" href="#" class="btn btn-outline-danger" onclick="return confirm('삭제하시겠습니까?')">삭제하기</a>
+          <a th:if="${writerYn eq false}" href="#" class="btn btn-outline-danger" onclick="return confirm('신고하시겠습니까?')">신고하기</a>
         </div>
       </div>
     </div>
