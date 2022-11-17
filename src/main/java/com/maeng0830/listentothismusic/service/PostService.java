@@ -1,11 +1,15 @@
 package com.maeng0830.listentothismusic.service;
 
-import com.maeng0830.listentothismusic.code.PostCode.PostStatusCode;
-import com.maeng0830.listentothismusic.config.auth.PrincipalDetails;
+import com.maeng0830.listentothismusic.code.commentCode.CommentStatusCode;
+import com.maeng0830.listentothismusic.code.postCode.PostStatusCode;
+import com.maeng0830.listentothismusic.domain.Comment;
 import com.maeng0830.listentothismusic.domain.Member;
 import com.maeng0830.listentothismusic.domain.Post;
 import com.maeng0830.listentothismusic.exception.LimuException;
+import com.maeng0830.listentothismusic.exception.errorcode.MemberErrorCode;
 import com.maeng0830.listentothismusic.exception.errorcode.PostErrorCode;
+import com.maeng0830.listentothismusic.repository.CommentRepository;
+import com.maeng0830.listentothismusic.repository.MemberRepository;
 import com.maeng0830.listentothismusic.repository.PostRepository;
 import com.maeng0830.listentothismusic.util.YoutubeViewTag;
 import java.time.LocalDateTime;
@@ -19,6 +23,8 @@ import org.springframework.stereotype.Service;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
+    private final MemberRepository memberRepository;
 
     // 게시글 등록
     public void writePost(Member member, Post post) {
@@ -129,4 +135,23 @@ public class PostService {
 
         postRepository.save(post);
     }
+
+    // 댓글 등록
+    public void writeComment(Long id, Comment commentInput, String userEmail) {
+
+        Member member = memberRepository.findByEmail(userEmail).orElseThrow(() -> new LimuException(
+            MemberErrorCode.NON_EXISTENT_MEMBER));
+
+        commentRepository.save(Comment.builder()
+            .postId(id)
+            .writerEmail(member.getEmail())
+            .writerNickName(member.getNickName())
+            .content(commentInput.getContent())
+            .mark(commentInput.getMark())
+            .regDtt(LocalDateTime.now())
+            .commentStatus(CommentStatusCode.POST)
+            .build());
+    }
+
+    //
 }

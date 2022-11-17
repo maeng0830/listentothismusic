@@ -1,17 +1,24 @@
 package com.maeng0830.listentothismusic.controller;
 
-import com.maeng0830.listentothismusic.code.PostCode.PostStatusCode;
-import com.maeng0830.listentothismusic.code.PostCode.TagCode;
+import com.maeng0830.listentothismusic.code.commentCode.CommentStatusCode;
+import com.maeng0830.listentothismusic.code.postCode.PostStatusCode;
+import com.maeng0830.listentothismusic.code.postCode.TagCode;
 import com.maeng0830.listentothismusic.config.auth.PrincipalDetails;
+import com.maeng0830.listentothismusic.domain.Comment;
 import com.maeng0830.listentothismusic.domain.Member;
 import com.maeng0830.listentothismusic.domain.Post;
 import com.maeng0830.listentothismusic.exception.LimuException;
 import com.maeng0830.listentothismusic.exception.errorcode.MemberErrorCode;
 import com.maeng0830.listentothismusic.exception.errorcode.PostErrorCode;
+import com.maeng0830.listentothismusic.repository.CommentRepository;
 import com.maeng0830.listentothismusic.repository.MemberRepository;
 import com.maeng0830.listentothismusic.repository.PostRepository;
 import com.maeng0830.listentothismusic.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,6 +33,7 @@ public class PostServiceController {
     private final PostService postService;
     private final MemberRepository memberRepository;
     private final PostRepository postRepository;
+    private final CommentRepository commentRepository;
 
     // 게시글 등록 api(get)
     @GetMapping("/post/write")
@@ -47,7 +55,8 @@ public class PostServiceController {
 
     // 게시글 등록 api(post)
     @PostMapping("/post/write")
-    public String writePostSubmit(@AuthenticationPrincipal PrincipalDetails userDetails, Post post) {
+    public String writePostSubmit(@AuthenticationPrincipal PrincipalDetails userDetails,
+        Post post) {
         if (userDetails == null) {
             throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
         }
@@ -63,7 +72,8 @@ public class PostServiceController {
     // 게시글 상세 조회 api
     @GetMapping("/post/read")
     public String readPost(Model model, @RequestParam Long id,
-        @AuthenticationPrincipal PrincipalDetails userDetails) {
+        @AuthenticationPrincipal PrincipalDetails userDetails,
+        @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Post post = postService.readPost(id);
 
@@ -76,6 +86,23 @@ public class PostServiceController {
         model.addAttribute("writerYn", writerYn);
         model.addAttribute("post", post);
 
+        Page<Comment> commentList = commentRepository.findByCommentStatus(CommentStatusCode.POST, pageable);
+
+        double start = Math.floor((commentList.getPageable().getPageNumber() / commentList.getPageable().getPageSize())
+            * commentList.getPageable().getPageSize() + 1);
+        double last = start + commentList.getPageable().getPageSize() - 1 < commentList.getTotalPages()
+            ? start + commentList.getPageable().getPageSize() - 1 : commentList.getTotalPages();
+        int pageNumber = commentList.getPageable().getPageNumber();
+        int pageSize = commentList.getPageable().getPageSize();
+        int totalPages = commentList.getTotalPages();
+
+        model.addAttribute("commentList", commentList);
+        model.addAttribute("start", start);
+        model.addAttribute("last", last);
+        model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("totalPages", totalPages);
+
         return "/post/read";
     }
 
@@ -87,7 +114,8 @@ public class PostServiceController {
             throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
         }
 
-        Post post = postRepository.findById(id).orElseThrow(() -> new LimuException(PostErrorCode.NON_EXISTENT_POST));
+        Post post = postRepository.findById(id)
+            .orElseThrow(() -> new LimuException(PostErrorCode.NON_EXISTENT_POST));
 
         if (post.getPostStatus().equals(PostStatusCode.DELETE)) {
             throw new LimuException(PostErrorCode.NON_VALIDATED_POST);
@@ -107,7 +135,8 @@ public class PostServiceController {
 
     // 게시글 수정 api(post)
     @PostMapping("/post/mod")
-    public String modPostSubmit(Model model, @RequestParam Long id, @AuthenticationPrincipal PrincipalDetails userDetails, Post postInput) {
+    public String modPostSubmit(Model model, @RequestParam Long id,
+        @AuthenticationPrincipal PrincipalDetails userDetails, Post postInput) {
         if (userDetails == null) {
             throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
         }
@@ -121,7 +150,8 @@ public class PostServiceController {
 
     // 게시글 삭제(get)
     @GetMapping("/post/delete")
-    public String deletePost(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails userDetails) {
+    public String deletePost(@RequestParam Long id,
+        @AuthenticationPrincipal PrincipalDetails userDetails) {
 
         postService.deletePost(id, userDetails.getUsername());
 
@@ -130,7 +160,8 @@ public class PostServiceController {
 
     // 게시글 신고(get)
     @GetMapping("/post/report")
-    public String reportPost(Model model, @RequestParam Long id, @AuthenticationPrincipal PrincipalDetails userDetails) {
+    public String reportPost(Model model, @RequestParam Long id,
+        @AuthenticationPrincipal PrincipalDetails userDetails) {
         if (userDetails == null) {
             throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
         }
@@ -145,7 +176,8 @@ public class PostServiceController {
 
     // 게시글 신고(post)
     @PostMapping("/post/report")
-    public String reportPostSubmit(@RequestParam Long id, Post post, @AuthenticationPrincipal PrincipalDetails userDetails) {
+    public String reportPostSubmit(@RequestParam Long id, Post post,
+        @AuthenticationPrincipal PrincipalDetails userDetails) {
         if (userDetails == null) {
             throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
         }
@@ -153,5 +185,18 @@ public class PostServiceController {
         postService.reportPost(id, post.getReportReason());
 
         return "redirect:/";
+    }
+
+    // 댓글 등록(post)
+    @PostMapping("/post/comment")
+    public String writeComment(@RequestParam Long id,
+        @AuthenticationPrincipal PrincipalDetails userDetails, Comment commentInput) {
+        if (userDetails == null) {
+            throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
+        }
+
+        postService.writeComment(id, commentInput, userDetails.getUsername());
+
+        return "redirect:/post/read?id=" + id;
     }
 }
