@@ -1,9 +1,9 @@
 package com.maeng0830.listentothismusic.domain;
 
-import com.maeng0830.listentothismusic.code.PostCode.TagCode.Genre;
-import com.maeng0830.listentothismusic.code.PostCode.TagCode.Mood;
-import com.maeng0830.listentothismusic.code.PostCode.TagCode.Weather;
-import com.maeng0830.listentothismusic.code.PostCode.PostStatusCode;
+import com.maeng0830.listentothismusic.code.postCode.TagCode.Genre;
+import com.maeng0830.listentothismusic.code.postCode.TagCode.Mood;
+import com.maeng0830.listentothismusic.code.postCode.TagCode.Weather;
+import com.maeng0830.listentothismusic.code.postCode.PostStatusCode;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;

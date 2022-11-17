@@ -1,4 +1,4 @@
-package com.maeng0830.listentothismusic.code.PostCode;
+package com.maeng0830.listentothismusic.code.postCode;
 
 import lombok.Getter;
 

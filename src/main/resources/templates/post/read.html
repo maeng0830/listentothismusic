@@ -44,6 +44,40 @@
           <a th:if="${writerYn eq true}" th:href="'/post/delete?id=' + ${post.id}" class="btn btn-outline-danger" onclick="return confirm('삭제하시겠습니까?')">삭제하기</a>
           <a th:if="${writerYn eq false}" th:href="'/post/report?id=' + ${post.id}" class="btn btn-outline-danger">신고하기</a>
         </div>
+        <hr>
+        <!-- 댓글 입력창 -->
+        <div class="card-body">
+          <form class="form-horizontal" th:action="'/post/comment?id=' + ${post.id}" method="post">
+            <div class="row">
+              <div class="form-group col-sm-8">
+                <textarea class="form-control input-sm" id="newReplyText" name="content" placeholder="댓글을 입력해주세요." required></textarea>
+              </div>
+              <div class="form-group col-md-4">
+                <label for="mark"></label>
+                <select class="form-control" id="mark" name="mark">
+                  <option selected value="">== 점수 ==</option>
+                  <option value="1">1점</option>
+                  <option value="2">2점</option>
+                  <option value="3">3점</option>
+                  <option value="4">4점</option>
+                  <option value="5">5점</option>
+                </select>
+              </div>
+              <div class="form-group col-sm-2">
+                <button type="submit" class="btn btn-primary">저장</button>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- 댓글 목록 -->
+        <div class="card-body">
+          <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              댓글!
+              <a href="#" class="badge badge-warning badge-pill">신고</a>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </main>
