@@ -8,6 +8,7 @@ import com.maeng0830.listentothismusic.domain.Comment;
 import com.maeng0830.listentothismusic.domain.Member;
 import com.maeng0830.listentothismusic.domain.Post;
 import com.maeng0830.listentothismusic.exception.LimuException;
+import com.maeng0830.listentothismusic.exception.errorcode.CommentErrorCode;
 import com.maeng0830.listentothismusic.exception.errorcode.MemberErrorCode;
 import com.maeng0830.listentothismusic.exception.errorcode.PostErrorCode;
 import com.maeng0830.listentothismusic.repository.CommentRepository;
@@ -102,6 +103,7 @@ public class PostServiceController {
         model.addAttribute("pageNumber", pageNumber);
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("totalPages", totalPages);
+        model.addAttribute("loginUser", userDetails.getUsername());
 
         return "/post/read";
     }
@@ -122,7 +124,7 @@ public class PostServiceController {
         }
 
         if (!post.getWriterEmail().equals(userDetails.getUsername())) {
-            throw new LimuException(PostErrorCode.NOT_AUTHORITY);
+            throw new LimuException(PostErrorCode.NOT_AUTHORITY_POST);
         }
 
         model.addAttribute("post", post);
@@ -188,7 +190,7 @@ public class PostServiceController {
     }
 
     // 댓글 등록(post)
-    @PostMapping("/post/comment")
+    @PostMapping("/post/comment/write")
     public String writeComment(@RequestParam Long id,
         @AuthenticationPrincipal PrincipalDetails userDetails, Comment commentInput) {
         if (userDetails == null) {
@@ -198,5 +200,71 @@ public class PostServiceController {
         postService.writeComment(id, commentInput, userDetails.getUsername());
 
         return "redirect:/post/read?id=" + id;
+    }
+
+    // 댓글 신고(get)
+    @GetMapping("/post/comment/report")
+    public String reportComment(Model model, @RequestParam Long id,
+        @AuthenticationPrincipal PrincipalDetails userDetails) {
+        if (userDetails == null) {
+            throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
+        }
+
+        Comment comment = commentRepository.findById(id)
+            .orElseThrow(() -> new LimuException(CommentErrorCode.NON_EXISTENT_COMMENT));
+
+        model.addAttribute("comment", comment);
+
+        return "/post/comment/report";
+    }
+
+    // 댓글 신고(post)
+    @PostMapping("/post/comment/report")
+    public String reportCommentSubmit(@RequestParam Long id, Comment commentInput,
+        @AuthenticationPrincipal PrincipalDetails userDetails) {
+        if (userDetails == null) {
+            throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
+        }
+
+        Comment comment = postService.reportComment(id, commentInput.getReportReason());
+
+        return "redirect:/post/read?id=" + comment.getPostId();
+    }
+
+    // 댓글 삭제(get)
+    @GetMapping("/post/comment/delete")
+    public String deleteComment(@RequestParam Long id,
+        @AuthenticationPrincipal PrincipalDetails userDetails) {
+
+        Comment comment = postService.deleteComment(id, userDetails.getUsername());
+
+        return "redirect:/post/read?id=" + comment.getPostId();
+    }
+
+    // 댓글 수정(get)
+    @GetMapping("/post/comment/mod")
+    public String modeComment(Model model, @RequestParam Long id, @AuthenticationPrincipal PrincipalDetails userDetails) {
+        if (userDetails == null) {
+            throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
+        }
+
+        Comment comment = commentRepository.findById(id)
+            .orElseThrow(() -> new LimuException(CommentErrorCode.NON_EXISTENT_COMMENT));
+
+        model.addAttribute("comment", comment);
+
+        return "/post/comment/mod";
+    }
+
+    // 댓글 수정(get)
+    @PostMapping("/post/comment/mod")
+    public String modeCommentSubmit(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails userDetails, Comment commentInput) {
+        if (userDetails == null) {
+            throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
+        }
+
+        Comment comment = postService.modComment(id, commentInput);
+
+        return "redirect:/post/read?id=" + comment.getPostId();
     }
 }

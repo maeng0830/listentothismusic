@@ -6,6 +6,7 @@ import com.maeng0830.listentothismusic.domain.Comment;
 import com.maeng0830.listentothismusic.domain.Member;
 import com.maeng0830.listentothismusic.domain.Post;
 import com.maeng0830.listentothismusic.exception.LimuException;
+import com.maeng0830.listentothismusic.exception.errorcode.CommentErrorCode;
 import com.maeng0830.listentothismusic.exception.errorcode.MemberErrorCode;
 import com.maeng0830.listentothismusic.exception.errorcode.PostErrorCode;
 import com.maeng0830.listentothismusic.repository.CommentRepository;
@@ -84,7 +85,7 @@ public class PostService {
         }
 
         if (!post.getWriterEmail().equals(userEmail)) {
-            throw new LimuException(PostErrorCode.NOT_AUTHORITY);
+            throw new LimuException(PostErrorCode.NOT_AUTHORITY_POST);
         }
 
         String[] linkArr = post.getMusicLink().split("/");
@@ -116,7 +117,7 @@ public class PostService {
         }
 
         if (!post.getWriterEmail().equals(userEmail)) {
-            throw new LimuException(PostErrorCode.NOT_AUTHORITY);
+            throw new LimuException(PostErrorCode.NOT_AUTHORITY_POST);
         }
 
         post.setPostStatus(PostStatusCode.DELETE);
@@ -153,5 +154,49 @@ public class PostService {
             .build());
     }
 
-    //
+    // 댓글 신고
+    public Comment reportComment(Long id, String reportReason) {
+        Comment comment = commentRepository.findById(id)
+            .orElseThrow(() -> new LimuException(CommentErrorCode.NON_EXISTENT_COMMENT));
+
+        comment.setCommentStatus(CommentStatusCode.REPORT);
+        comment.setReportReason(reportReason);
+        comment.setReportDtt(LocalDateTime.now());
+
+        commentRepository.save(comment);
+
+        return comment;
+    }
+
+    // 댓글 삭제
+    public Comment deleteComment(Long id, String userEmail) {
+        Comment comment = commentRepository.findById(id)
+            .orElseThrow(() -> new LimuException(CommentErrorCode.NON_EXISTENT_COMMENT));
+
+        if (comment.getCommentStatus().equals(CommentStatusCode.DELETE)) {
+            throw new LimuException(PostErrorCode.NON_VALIDATED_POST);
+        }
+
+        if (!comment.getWriterEmail().equals(userEmail)) {
+            throw new LimuException(PostErrorCode.NOT_AUTHORITY_POST);
+        }
+
+        comment.setCommentStatus(CommentStatusCode.DELETE);
+
+        commentRepository.save(comment);
+
+        return comment;
+    }
+
+    public Comment modComment(Long id, Comment commentInput) {
+
+        Comment comment = commentRepository.findById(id)
+            .orElseThrow(() -> new LimuException(CommentErrorCode.NON_EXISTENT_COMMENT));
+
+        comment.setContent(commentInput.getContent());
+
+        commentRepository.save(comment);
+
+        return comment;
+    }
 }
