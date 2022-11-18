@@ -47,7 +47,7 @@
         <hr>
         <!-- 댓글 입력창 -->
         <div class="card-body">
-          <form class="form-horizontal" th:action="'/post/comment?id=' + ${post.id}" method="post">
+          <form class="form-horizontal" th:action="'/post/comment/write?id=' + ${post.id}" method="post">
             <div class="row">
               <div class="form-group col-sm-8">
                 <textarea class="form-control input-sm" id="newReplyText" name="content" placeholder="댓글을 입력해주세요." required></textarea>
@@ -71,10 +71,13 @@
         </div>
         <!-- 댓글 목록 -->
         <div class="card-body">
-          <ul class="list-group">
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-              댓글!
-              <a href="#" class="badge badge-warning badge-pill">신고</a>
+          <ul th:each="comment: ${commentList}" class="list-group">
+            <li class="list-group-item row">
+              <p th:text="${comment.content}"> 댓글 </p>
+              <span th:text="${comment.mark} + '점'" class="badge badge-primary">Primary</span>
+              <a style="" th:if="${comment.writerEmail eq loginUser}" th:href="'/post/comment/mod?id=' + ${comment.id}" class="badge badge-warning badge-pill">수정</a>
+              <a th:if="${comment.writerEmail eq loginUser}" th:href="'/post/comment/delete?id=' + ${comment.id}" class="badge badge-warning badge-pill" onclick="return confirm('삭제하시겠습니까?')">삭제</a>
+              <a th:unless="${comment.writerEmail eq loginUser}" th:href="'/post/comment/report?id=' + ${comment.id}" class="badge badge-warning badge-pill">신고</a>
             </li>
           </ul>
         </div>
