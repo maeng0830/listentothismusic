@@ -11,7 +11,7 @@ public class TagCode {
     @RequiredArgsConstructor
     public enum Genre {
         HIPHOP("힙합"),
-        ballad("발라드"),
+        BALLAD("발라드"),
         ROCK("락"),
         JAZZ("재즈");
 

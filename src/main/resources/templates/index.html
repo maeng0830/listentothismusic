@@ -12,18 +12,18 @@
   <script src="/summernote/summernote-ko-KR.js"></script>
 </head>
 <body>
-  <h1>메인 페이지</h1>
+  <h1>LiMu</h1>
   <hr>
   <div th:if="${loginYn eq true}">
     <a th:if="${authYn eq true}" href="/member/info">회원 정보</a>
     <a th:if="${authYn eq false}" href="/mail-auth">메일 인증</a>
   </div>
   <hr>
-  <table class="table table-hover">
+  <table class="table table-hover text-center">
     <thead>
       <tr>
         <th scope="col">게시글 번호</th>
-        <th scope="col">게시글 제목</th>
+        <th scope="col">게시글 제목(태그, 점수)</th>
         <th scope="col">게시글 작성자</th>
         <th scope="col">작성 일시</th>
         <th scope="col">조회수</th>
@@ -32,7 +32,13 @@
     <tbody>
       <tr th:each="post: ${postList}">
         <th scope="row" th:text="${post.id}"></th>
-        <td><a th:text="${post.title}" th:href="${'/post/read?id=' + post.id}"></a><br><p th:text="${post.genre.getValue()} + ' ' + ${post.mood.getValue()} + ' ' + ${post.weather.getValue()}"></p></td>
+        <td>
+          <a th:text="${post.title}" th:href="${'/post/read?id=' + post.id}">제목</a><br>
+          <span th:text="${post.genre.getValue()}" class="badge badge-primary">Primary</span>
+          <span th:text="${post.mood.getValue()}" class="badge badge-primary">Primary</span>
+          <span th:text="${post.weather.getValue()}" class="badge badge-primary">Primary</span>
+          <span th:text="${post.meanMarks} + '점'" class="badge badge-success">Primary</span>
+        </td>
         <td th:text="${post.writerNickName}"></td>
         <td th:text="${post.postDtt}"></td>
         <td th:text="${post.hits}"></td>
@@ -40,7 +46,11 @@
     </tbody>
   </table>
 
-  <nav aria-label="Search results pages">
+  <blockquote th:if="${totalPages eq 0}" class="blockquote text-center">
+    <p class="h2 mb-0">게시글이 없습니다. 첫 번째 게시글을 작성해주세요!</p>
+  </blockquote>
+
+  <nav th:unless="${totalPages eq 0}" aria-label="Search results pages">
     <ul class="pagination justify-content-center">
       <!--첫번째 페이지로 -->
       <li class="page-item" th:classappend="${pageNumber < pageSize} ? 'disabled'">
