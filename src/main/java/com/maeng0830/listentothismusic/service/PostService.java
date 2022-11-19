@@ -14,6 +14,7 @@ import com.maeng0830.listentothismusic.repository.MemberRepository;
 import com.maeng0830.listentothismusic.repository.PostRepository;
 import com.maeng0830.listentothismusic.util.YoutubeViewTag;
 import java.time.LocalDateTime;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -48,12 +49,14 @@ public class PostService {
             .mood(post.getMood())
             .weather(post.getWeather())
             .postStatus(PostStatusCode.POST)
+            .meanMarks((double) 0)
+            .hits(0L)
             .build());
     }
 
     // 게시글 목록 조회
     public Page<Post> viewPostList(Pageable pageable) {
-        return postRepository.findByPostStatus(PostStatusCode.POST, pageable);
+        return postRepository.findByPostStatusNot(PostStatusCode.DELETE, pageable);
     }
 
     // 게시글 상세 조회
@@ -62,8 +65,7 @@ public class PostService {
         Post post = postRepository.findById(id)
             .orElseThrow(() -> new LimuException(PostErrorCode.NON_EXISTENT_POST));
 
-        if (post.getPostStatus().equals(PostStatusCode.REPORT) || post.getPostStatus()
-            .equals(PostStatusCode.DELETE)) {
+        if (post.getPostStatus().equals(PostStatusCode.DELETE)) {
             throw new LimuException(PostErrorCode.NON_VALIDATED_POST);
         }
 
@@ -188,6 +190,7 @@ public class PostService {
         return comment;
     }
 
+    // 댓글 수정
     public Comment modComment(Long id, Comment commentInput) {
 
         Comment comment = commentRepository.findById(id)
@@ -198,5 +201,24 @@ public class PostService {
         commentRepository.save(comment);
 
         return comment;
+    }
+
+    // 게시글 평점 계산 및 저장
+    public void calculatePostMark(Long id) {
+        List<Comment> commentList = commentRepository.findByPostId(id)
+            .orElseThrow(() -> new LimuException(PostErrorCode.NOT_POST_COMMENT_AND_MARK));
+
+        double meanMarks = 0;
+
+        for (Comment comment : commentList) {
+            meanMarks += comment.getMark();
+        }
+
+        meanMarks /= commentList.size();
+
+        Post post = postRepository.findById(id)
+            .orElseThrow(() -> new LimuException(PostErrorCode.NON_EXISTENT_POST));
+        post.setMeanMarks(meanMarks);
+        postRepository.save(post);
     }
 }

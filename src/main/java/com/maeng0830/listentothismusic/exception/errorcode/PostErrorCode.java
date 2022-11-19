@@ -9,7 +9,8 @@ public enum PostErrorCode implements ErrorCode {
 
     NON_EXISTENT_POST("존재하지 않는 게시글입니다."),
     NON_VALIDATED_POST("유효하지 않은 게시글입니다."),
-    NOT_AUTHORITY_POST("해당 게시글에 대한 수정 및 삭제 권한이 없습니다.");
+    NOT_AUTHORITY_POST("해당 게시글에 대한 수정 및 삭제 권한이 없습니다."),
+    NOT_POST_COMMENT_AND_MARK("해당 게시글에 댓글 및 평점이 없습니다.");
 
     private final String description;
 }

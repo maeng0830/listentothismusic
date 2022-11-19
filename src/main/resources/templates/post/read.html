@@ -73,9 +73,10 @@
         <div class="card-body">
           <ul th:each="comment: ${commentList}" class="list-group">
             <li class="list-group-item row">
+              <p th:text="${comment.writerNickName} + ' : ' + ${comment.regDtt}">작성자 : 작성일</p>
               <p th:text="${comment.content}"> 댓글 </p>
               <span th:text="${comment.mark} + '점'" class="badge badge-primary">Primary</span>
-              <a style="" th:if="${comment.writerEmail eq loginUser}" th:href="'/post/comment/mod?id=' + ${comment.id}" class="badge badge-warning badge-pill">수정</a>
+              <a th:if="${comment.writerEmail eq loginUser}" th:href="'/post/comment/mod?id=' + ${comment.id}" class="badge badge-warning badge-pill">수정</a>
               <a th:if="${comment.writerEmail eq loginUser}" th:href="'/post/comment/delete?id=' + ${comment.id}" class="badge badge-warning badge-pill" onclick="return confirm('삭제하시겠습니까?')">삭제</a>
               <a th:unless="${comment.writerEmail eq loginUser}" th:href="'/post/comment/report?id=' + ${comment.id}" class="badge badge-warning badge-pill">신고</a>
             </li>

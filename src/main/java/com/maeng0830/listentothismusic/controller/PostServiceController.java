@@ -15,6 +15,7 @@ import com.maeng0830.listentothismusic.repository.CommentRepository;
 import com.maeng0830.listentothismusic.repository.MemberRepository;
 import com.maeng0830.listentothismusic.repository.PostRepository;
 import com.maeng0830.listentothismusic.service.PostService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -73,8 +74,7 @@ public class PostServiceController {
     // 게시글 상세 조회 api
     @GetMapping("/post/read")
     public String readPost(Model model, @RequestParam Long id,
-        @AuthenticationPrincipal PrincipalDetails userDetails,
-        @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        @AuthenticationPrincipal PrincipalDetails userDetails) {
 
         Post post = postService.readPost(id);
 
@@ -87,22 +87,9 @@ public class PostServiceController {
         model.addAttribute("writerYn", writerYn);
         model.addAttribute("post", post);
 
-        Page<Comment> commentList = commentRepository.findByCommentStatus(CommentStatusCode.POST, pageable);
-
-        double start = Math.floor((commentList.getPageable().getPageNumber() / commentList.getPageable().getPageSize())
-            * commentList.getPageable().getPageSize() + 1);
-        double last = start + commentList.getPageable().getPageSize() - 1 < commentList.getTotalPages()
-            ? start + commentList.getPageable().getPageSize() - 1 : commentList.getTotalPages();
-        int pageNumber = commentList.getPageable().getPageNumber();
-        int pageSize = commentList.getPageable().getPageSize();
-        int totalPages = commentList.getTotalPages();
+        List<Comment> commentList = commentRepository.findByCommentStatusNot(CommentStatusCode.DELETE);
 
         model.addAttribute("commentList", commentList);
-        model.addAttribute("start", start);
-        model.addAttribute("last", last);
-        model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("totalPages", totalPages);
         model.addAttribute("loginUser", userDetails.getUsername());
 
         return "/post/read";
@@ -198,6 +185,8 @@ public class PostServiceController {
         }
 
         postService.writeComment(id, commentInput, userDetails.getUsername());
+
+        postService.calculatePostMark(id);
 
         return "redirect:/post/read?id=" + id;
     }
