@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <title>회원 상세 정보 페이지</title>
+  <title>신고 댓글 상세 정보 페이지</title>
   <!-- 부트스트랩 -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">  <script type="text/javascript" src="//code.jquery.com/jquery-3.6.0.min.js"></script>
   <!-- 서머노트 -->
@@ -13,7 +13,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>회원 상세 정보 페이지</h1>
+    <h1>신고 댓글 상세 정보 페이지</h1>
     <hr>
     <a class="btn btn-primary" href="/admin/member-list" role="button">회원 목록</a>
     <a class="btn btn-primary" href="/admin/reported-post-list" role="button">신고 게시글 목록</a>
@@ -21,47 +21,42 @@
   </div>
   <br>
 
-  <table class="table">
+  <table class="table table-hover text-center">
     <thead>
       <tr>
-        <th scope="col">회원 번호</th>
-        <th scope="col">회원 아이디</th>
-        <th scope="col">회원 가입일</th>
-        <th scope="col">회원 이름</th>
-        <th scope="col">연락처</th>
-        <th scope="col">닉네임</th>
-        <th scope="col">회원 상태</th>
-        <th scope="col">회원 권한</th>
+        <th scope="col">댓글 작성자 이메일</th>
+        <th scope="col">댓글 작성자 닉네임</th>
+        <th scope="col">댓글 내용</th>
+        <th scope="col">댓글 작성일</th>
+        <th scope="col">신고 사유</th>
+        <th scope="col">댓글 상태</th>
+        <th scope="col">댓글 상태 변경</th>
       </tr>
     </thead>
     <tbody>
       <tr>
-        <th scope="row" th:text="${member.id}"></th>
-        <td th:text="${member.email}"></td>
-        <td th:text="${member.regDtt}"></td>
-        <td th:text="${member.userName}"></td>
-        <td th:text="${member.phone}"></td>
-        <td th:text="${member.nickName}"></td>
+        <th scope="row" th:text="${comment.writerEmail}"></th>
+        <td th:text="${comment.writerNickName}"></td>
+        <td th:text="${comment.content}"></td>
+        <td th:text="${comment.regDtt}"></td>
+        <td th:text="${comment.reportReason}"></td>
+        <td th:text="${comment.commentStatus}"></td>
         <td>
-          <p th:text="${'현재 상태: ' + member.status}"></p>
-          <form action="/admin/member-detail" method="post">
-            <input th:value="${member.email}" type="hidden" name="email">
-            <select name="status">
-              <option value="none">== 선택 ==</option>
-              <option value="REQ">인증 요청 상태</option>
-              <option value="ING">활성 상태</option>
-              <option value="STOP">정지 상태</option>
-              <option value="WITHDRAW">탈퇴 상태</option>
+          <form th:action="'/admin/reported-comment-detail?id=' + ${comment.id}" method="post">
+            <select name="commentStatus">
+              <option selected>== 선택 ==</option>
+              <option value="POST">정상 게시 상태</option>
+              <option value="REPORT">신고 상태</option>
+              <option value="DELETE">삭제 상태</option>
             </select>
-            <button type="submit">회원 상태 수정</button>
+            <button class="btn btn-primary" type="submit">상태 수정</button>
           </form>
         </td>
-        <td th:text="${member.authority}"></td>
       </tr>
     </tbody>
   </table>
 
-  <a class="btn btn-secondary" href="/admin/member-list" role="button">회원 목록으로</a>
+  <a class="btn btn-secondary" href="/admin/reported-comment-list" role="button">신고 댓글 목록으로</a>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-Fy6S3B9q64WdZWQUiU+q4/2Lc9npb8tCaSX9FK7E8HnRr0Jz8D6OP9dO5Vg3Q9ct" crossorigin="anonymous"></script>
 </body>
 </html>
