@@ -82,16 +82,6 @@ public class MemberServiceController {
         return "/index";
     }
 
-    @GetMapping("/member")
-    public @ResponseBody String member() {
-        return "member page";
-    }
-
-    @GetMapping("/admin")
-    public @ResponseBody String admin() {
-        return "admin page";
-    }
-
     // 로그인 페이지
     @GetMapping("/login-form")
     public String loginForm() {

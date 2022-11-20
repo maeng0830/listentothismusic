@@ -12,4 +12,6 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     List<Comment> findByPostIdAndCommentStatusNot(Long id, CommentStatusCode commentStatusCode);
 
     Optional<List<Comment>> findByPostId(Long id);
+
+    Page<Comment> findByCommentStatus(CommentStatusCode report, Pageable pageable);
 }
