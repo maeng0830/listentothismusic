@@ -72,6 +72,13 @@ public class MemberServiceController {
         model.addAttribute("pageSize", pageSize);
         model.addAttribute("totalPages", totalPages);
 
+        System.out.println(postList);
+        System.out.println(start);
+        System.out.println(last);
+        System.out.println(pageNumber);
+        System.out.println(pageSize);
+        System.out.println(totalPages);
+
         return "/index";
     }
 

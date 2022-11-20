@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findByCommentStatusNot(CommentStatusCode commentStatusCode);
+    List<Comment> findByPostIdAndCommentStatusNot(Long id, CommentStatusCode commentStatusCode);
 
     Optional<List<Comment>> findByPostId(Long id);
 }

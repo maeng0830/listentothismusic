@@ -17,10 +17,6 @@ import com.maeng0830.listentothismusic.repository.PostRepository;
 import com.maeng0830.listentothismusic.service.PostService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -79,18 +75,20 @@ public class PostServiceController {
         Post post = postService.readPost(id);
 
         boolean writerYn = false;
+        String loginUser = "";
 
-        if (post.getWriterEmail().equals(userDetails.getUsername())) {
+        if (userDetails != null && post.getWriterEmail().equals(userDetails.getUsername())) {
+            loginUser = userDetails.getUsername();
             writerYn = true;
         }
 
         model.addAttribute("writerYn", writerYn);
         model.addAttribute("post", post);
+        model.addAttribute("loginUser", loginUser);
 
-        List<Comment> commentList = commentRepository.findByCommentStatusNot(CommentStatusCode.DELETE);
+        List<Comment> commentList = commentRepository.findByPostIdAndCommentStatusNot(id, CommentStatusCode.DELETE);
 
         model.addAttribute("commentList", commentList);
-        model.addAttribute("loginUser", userDetails.getUsername());
 
         return "/post/read";
     }
