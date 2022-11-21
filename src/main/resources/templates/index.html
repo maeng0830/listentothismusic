@@ -16,8 +16,13 @@
     <h1>LiMu</h1>
     <hr>
     <div th:if="${loginYn eq true}">
-      <a th:if="${authYn eq true}" href="/member/info">회원 정보</a>
-      <a th:if="${authYn eq false}" href="/mail-auth">메일 인증</a>
+      <a th:if="${authYn eq true}" class="btn btn-primary" href="/member/info" role="button">회원 정보</a>
+      <a th:if="${authYn eq false}" class="btn btn-primary" href="/mail-auth" role="button">메일 인증</a>
+      <a class="btn btn-primary" href="/logout" role="button">로그 아웃</a>
+    </div>
+    <div th:if="${loginYn eq false}">
+      <a class="btn btn-primary" href="/login-form" role="button">로그인</a>
+      <a class="btn btn-primary" href="/join-form" role="button">회원가입</a>
     </div>
   </div>
 

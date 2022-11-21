@@ -13,11 +13,8 @@ import com.maeng0830.listentothismusic.exception.errorcode.PostErrorCode;
 import com.maeng0830.listentothismusic.repository.CommentRepository;
 import com.maeng0830.listentothismusic.repository.MemberRepository;
 import com.maeng0830.listentothismusic.repository.PostRepository;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -60,12 +57,14 @@ public class AdminService {
     // 신고 게시글 상세 조회
     public Post viewReportedPostDetail(Long id) {
 
-        return postRepository.findById(id).orElseThrow(() -> new LimuException(PostErrorCode.NON_EXISTENT_POST));
+        return postRepository.findById(id)
+            .orElseThrow(() -> new LimuException(PostErrorCode.NON_EXISTENT_POST));
     }
 
     // 신고 게시글 정보 수정
     public void modPostInfo(Long id, PostStatusCode status) {
-        Post post = postRepository.findById(id).orElseThrow(() -> new LimuException(PostErrorCode.NON_EXISTENT_POST));
+        Post post = postRepository.findById(id)
+            .orElseThrow(() -> new LimuException(PostErrorCode.NON_EXISTENT_POST));
 
         post.setPostStatus(status);
 
@@ -79,12 +78,14 @@ public class AdminService {
 
     // 신고 댓글 상세 조회
     public Comment viewReportedCommentDetail(Long id) {
-        return commentRepository.findById(id).orElseThrow(() -> new LimuException(CommentErrorCode.NON_EXISTENT_COMMENT));
+        return commentRepository.findById(id)
+            .orElseThrow(() -> new LimuException(CommentErrorCode.NON_EXISTENT_COMMENT));
     }
 
     // 신고 댓글 정보 수정
     public void modCommentInfo(Long id, CommentStatusCode commentStatus) {
-        Comment comment = commentRepository.findById(id).orElseThrow(() -> new LimuException(CommentErrorCode.NON_EXISTENT_COMMENT));
+        Comment comment = commentRepository.findById(id)
+            .orElseThrow(() -> new LimuException(CommentErrorCode.NON_EXISTENT_COMMENT));
 
         comment.setCommentStatus(commentStatus);
 

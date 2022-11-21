@@ -7,11 +7,10 @@ import com.maeng0830.listentothismusic.dto.SearchDto;
 import com.maeng0830.listentothismusic.exception.LimuException;
 import com.maeng0830.listentothismusic.exception.errorcode.MemberErrorCode;
 import com.maeng0830.listentothismusic.repository.MemberRepository;
-import com.maeng0830.listentothismusic.repository.PostRepository;
 import com.maeng0830.listentothismusic.service.MemberService;
 import com.maeng0830.listentothismusic.service.PostService;
-import java.util.List;
-import java.util.Optional;
+import com.maeng0830.listentothismusic.util.Paging;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,11 +30,11 @@ public class MemberServiceController {
     private final MemberService memberService;
     private final PostService postService;
     private final MemberRepository memberRepository;
-    private final PostRepository postRepository;
 
     // 로그인 상태, 인증 X 상태인 경우 인증 메일 요청 링크 활성화
     @GetMapping("/")
-    public String main(Model model, @AuthenticationPrincipal PrincipalDetails userDetails, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public String main(Model model, @AuthenticationPrincipal PrincipalDetails userDetails,
+        @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Member member = null;
 
         boolean loginYn = false;
@@ -58,27 +56,14 @@ public class MemberServiceController {
 
         Page<Post> postList = postService.viewPostList(pageable);
 
-        double start = Math.floor((postList.getPageable().getPageNumber() / postList.getPageable().getPageSize())
-            * postList.getPageable().getPageSize() + 1);
-        double last = start + postList.getPageable().getPageSize() - 1 < postList.getTotalPages()
-            ? start + postList.getPageable().getPageSize() - 1 : postList.getTotalPages();
-        int pageNumber = postList.getPageable().getPageNumber();
-        int pageSize = postList.getPageable().getPageSize();
-        int totalPages = postList.getTotalPages();
+        Map<String, Double> pagingElement = Paging.createPagingElement(postList);
 
         model.addAttribute("postList", postList);
-        model.addAttribute("start", start);
-        model.addAttribute("last", last);
-        model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("totalPages", totalPages);
-
-        System.out.println(postList);
-        System.out.println(start);
-        System.out.println(last);
-        System.out.println(pageNumber);
-        System.out.println(pageSize);
-        System.out.println(totalPages);
+        model.addAttribute("start", pagingElement.get("start"));
+        model.addAttribute("last", pagingElement.get("last"));
+        model.addAttribute("pageNumber", pagingElement.get("pageNumber"));
+        model.addAttribute("pageSize", pagingElement.get("pageSize"));
+        model.addAttribute("totalPages", pagingElement.get("totalPages"));
 
         return "/index";
     }
@@ -110,7 +95,8 @@ public class MemberServiceController {
         if (userDetails == null) {
             throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
         } else {
-            Member member = memberRepository.findByEmail(userDetails.getUsername()).orElseThrow(() -> new RuntimeException());
+            Member member = memberRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new RuntimeException());
             memberService.authEmailSend(member);
         }
 
@@ -155,7 +141,9 @@ public class MemberServiceController {
 
     // 검색 게시글 조회
     @GetMapping("/search")
-    public String search(Model model, @AuthenticationPrincipal PrincipalDetails userDetails, SearchDto searchDto, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+    public String search(Model model, @AuthenticationPrincipal PrincipalDetails userDetails,
+        SearchDto searchDto,
+        @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Member member = null;
 
         boolean loginYn = false;
@@ -177,27 +165,14 @@ public class MemberServiceController {
 
         Page<Post> postList = postService.searchPostList(searchDto.getSearchValue(), pageable);
 
-        double start = Math.floor((postList.getPageable().getPageNumber() / postList.getPageable().getPageSize())
-            * postList.getPageable().getPageSize() + 1);
-        double last = start + postList.getPageable().getPageSize() - 1 < postList.getTotalPages()
-            ? start + postList.getPageable().getPageSize() - 1 : postList.getTotalPages();
-        int pageNumber = postList.getPageable().getPageNumber();
-        int pageSize = postList.getPageable().getPageSize();
-        int totalPages = postList.getTotalPages();
+        Map<String, Double> pagingElement = Paging.createPagingElement(postList);
 
         model.addAttribute("postList", postList);
-        model.addAttribute("start", start);
-        model.addAttribute("last", last);
-        model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("totalPages", totalPages);
-
-        System.out.println(postList);
-        System.out.println(start);
-        System.out.println(last);
-        System.out.println(pageNumber);
-        System.out.println(pageSize);
-        System.out.println(totalPages);
+        model.addAttribute("start", pagingElement.get("start"));
+        model.addAttribute("last", pagingElement.get("last"));
+        model.addAttribute("pageNumber", pagingElement.get("pageNumber"));
+        model.addAttribute("pageSize", pagingElement.get("pageSize"));
+        model.addAttribute("totalPages", pagingElement.get("totalPages"));
 
         return "/search";
     }

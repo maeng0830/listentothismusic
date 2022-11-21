@@ -7,9 +7,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
+
     Page<Post> findByPostStatusNot(PostStatusCode postStatusCode, Pageable pageable);
 
     Page<Post> findByPostStatus(PostStatusCode report, Pageable pageable);
 
-    Page<Post> findByTitleContainingOrMusicTitleContainingAndPostStatusNot(String musicTitle, String artist, PostStatusCode postStatusCode, Pageable pageable);
+    Page<Post> findByTitleContainingOrMusicTitleContainingAndPostStatusNot(String musicTitle,
+        String artist, PostStatusCode postStatusCode, Pageable pageable);
 }
