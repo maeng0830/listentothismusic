@@ -54,7 +54,7 @@ public class PostService {
             .build());
     }
 
-    // 게시글 목록 조회
+    // 메인 페이지 게시글 목록 조회
     public Page<Post> viewPostList(Pageable pageable) {
         return postRepository.findByPostStatusNot(PostStatusCode.DELETE, pageable);
     }
@@ -220,5 +220,10 @@ public class PostService {
             .orElseThrow(() -> new LimuException(PostErrorCode.NON_EXISTENT_POST));
         post.setMeanMarks(meanMarks);
         postRepository.save(post);
+    }
+
+    // 검색 게시글 목록 조회
+    public Page<Post> searchPostList(String searchValue, Pageable pageable) {
+       return postRepository.findByTitleContainingOrMusicTitleContainingAndPostStatusNot(searchValue, searchValue, PostStatusCode.DELETE, pageable);
     }
 }

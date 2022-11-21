@@ -3,6 +3,7 @@ package com.maeng0830.listentothismusic.controller;
 import com.maeng0830.listentothismusic.config.auth.PrincipalDetails;
 import com.maeng0830.listentothismusic.domain.Member;
 import com.maeng0830.listentothismusic.domain.Post;
+import com.maeng0830.listentothismusic.dto.SearchDto;
 import com.maeng0830.listentothismusic.exception.LimuException;
 import com.maeng0830.listentothismusic.exception.errorcode.MemberErrorCode;
 import com.maeng0830.listentothismusic.repository.MemberRepository;
@@ -150,5 +151,54 @@ public class MemberServiceController {
         memberService.memberInfoMod(memberInput);
 
         return "redirect:/member/info";
+    }
+
+    // 검색 게시글 조회
+    @GetMapping("/search")
+    public String search(Model model, @AuthenticationPrincipal PrincipalDetails userDetails, SearchDto searchDto, @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
+        Member member = null;
+
+        boolean loginYn = false;
+        boolean authYn = false;
+
+        // 로그인 여부 확인
+        if (userDetails != null) {
+            loginYn = true;
+            member = memberRepository.findByEmail(userDetails.getUsername())
+                .orElseThrow(() -> new LimuException(MemberErrorCode.NON_EXISTENT_MEMBER));
+            // 인증 여부 확인
+            if (member.isAuthYn()) {
+                authYn = true;
+            }
+        }
+
+        model.addAttribute("loginYn", loginYn);
+        model.addAttribute("authYn", authYn);
+
+        Page<Post> postList = postService.searchPostList(searchDto.getSearchValue(), pageable);
+
+        double start = Math.floor((postList.getPageable().getPageNumber() / postList.getPageable().getPageSize())
+            * postList.getPageable().getPageSize() + 1);
+        double last = start + postList.getPageable().getPageSize() - 1 < postList.getTotalPages()
+            ? start + postList.getPageable().getPageSize() - 1 : postList.getTotalPages();
+        int pageNumber = postList.getPageable().getPageNumber();
+        int pageSize = postList.getPageable().getPageSize();
+        int totalPages = postList.getTotalPages();
+
+        model.addAttribute("postList", postList);
+        model.addAttribute("start", start);
+        model.addAttribute("last", last);
+        model.addAttribute("pageNumber", pageNumber);
+        model.addAttribute("pageSize", pageSize);
+        model.addAttribute("totalPages", totalPages);
+
+        System.out.println(postList);
+        System.out.println(start);
+        System.out.println(last);
+        System.out.println(pageNumber);
+        System.out.println(pageSize);
+        System.out.println(totalPages);
+
+        return "/search";
     }
 }

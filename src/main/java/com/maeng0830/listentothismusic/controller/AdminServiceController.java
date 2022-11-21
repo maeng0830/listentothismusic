@@ -1,26 +1,19 @@
 package com.maeng0830.listentothismusic.controller;
 
-import com.maeng0830.listentothismusic.code.memberCode.MemberAuthorityCode;
-import com.maeng0830.listentothismusic.config.auth.PrincipalDetails;
 import com.maeng0830.listentothismusic.domain.Comment;
 import com.maeng0830.listentothismusic.domain.Member;
 import com.maeng0830.listentothismusic.domain.Post;
-import com.maeng0830.listentothismusic.exception.LimuException;
-import com.maeng0830.listentothismusic.exception.errorcode.MemberErrorCode;
 import com.maeng0830.listentothismusic.service.AdminService;
-import javax.jws.WebParam.Mode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
@@ -34,7 +27,7 @@ public class AdminServiceController {
         return "/admin/main";
     }
 
-    // 회원 목록 조회 api
+    // 회원 목록 조회
     @GetMapping("/admin/member-list")
     public String viewMemberList(Model model,
         @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -122,7 +115,7 @@ public class AdminServiceController {
         return "redirect:/admin/reported-post-detail?id=" + id;
     }
 
-    // 신고 게시글 목록 조회
+    // 신고 댓글 목록 조회
     @GetMapping("/admin/reported-comment-list")
     public String viewReportedCommentList(Model model,
         @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -148,7 +141,7 @@ public class AdminServiceController {
         return "/admin/reported-comment-list";
     }
 
-    // 신고 게시글 상세 정보 조회
+    // 신고 댓글 상세 정보 조회
     @GetMapping("/admin/reported-comment-detail")
     public String viewReportedCommentDetail(Model model, @RequestParam Long id) {
         Comment comment = adminService.viewReportedCommentDetail(id);
