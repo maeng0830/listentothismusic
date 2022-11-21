@@ -4,6 +4,7 @@ import com.maeng0830.listentothismusic.config.auth.PrincipalDetails;
 import com.maeng0830.listentothismusic.domain.Member;
 import com.maeng0830.listentothismusic.domain.Post;
 import com.maeng0830.listentothismusic.dto.SearchDto;
+import com.maeng0830.listentothismusic.dto.WithdrawDto;
 import com.maeng0830.listentothismusic.exception.LimuException;
 import com.maeng0830.listentothismusic.exception.errorcode.MemberErrorCode;
 import com.maeng0830.listentothismusic.repository.MemberRepository;
@@ -137,6 +138,22 @@ public class MemberServiceController {
         memberService.memberInfoMod(memberInput);
 
         return "redirect:/member/info";
+    }
+
+    // 회원 탈퇴(Get)
+    @GetMapping("/member/withdraw")
+    public String memberWithdraw() {
+
+        return "/member/withdraw";
+    }
+
+    // 회원 탈퇴(Post)
+    @PostMapping("/member/withdraw")
+    public String memberWithdrawSubmit(@AuthenticationPrincipal PrincipalDetails userDetails, WithdrawDto withdrawDto) {
+
+        memberService.withdraw(userDetails.getUsername(), withdrawDto.getPassword(), withdrawDto.getRePassword());
+
+        return "redirect:/logout";
     }
 
     // 검색 게시글 조회

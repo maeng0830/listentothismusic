@@ -103,5 +103,21 @@ public class MemberService {
 
         memberRepository.save(member);
     }
+
+    // 회원 탈퇴
+    public void withdraw(String email, String password, String rePassword) {
+        if (!password.equals(rePassword)) {
+            throw new LimuException(MemberErrorCode.INCORRECT_PASSWORD_AND_REPASSWORD);
+        }
+
+        Member member = memberRepository.findByEmail(email)
+            .orElseThrow(() -> new LimuException(MemberErrorCode.NON_EXISTENT_MEMBER));
+
+        if (bCryptPasswordEncoder.matches(password, member.getPassword()) && bCryptPasswordEncoder.matches(rePassword, member.getPassword())) {
+            memberRepository.deleteById(member.getId());
+        } else {
+            throw new LimuException(MemberErrorCode.INCORRECT_PASSWORD_AND_REPASSWORD);
+        }
+    }
 }
 

@@ -14,7 +14,8 @@ public enum MemberErrorCode implements ErrorCode {
     EXCEED_AUTH_TIME("인증 유효 시간을 초과했습니다. 인증 메일을 재요청 해주세요."),
     REQUIRED_LOGIN("로그인을 해주세요."),
     NON_EXISTENT_MEMBER("존재하지 않는 회원입니다."),
-    NON_AUTHORITY("권한이 없습니다.");
+    NON_AUTHORITY("권한이 없습니다."),
+    INCORRECT_PASSWORD_AND_REPASSWORD("비밀번호와 확인 비밀번호가 정확하지 않습니다.");
 
 
     private final String description;
