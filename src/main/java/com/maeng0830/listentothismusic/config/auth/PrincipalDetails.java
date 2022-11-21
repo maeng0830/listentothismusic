@@ -1,5 +1,6 @@
 package com.maeng0830.listentothismusic.config.auth;
 
+import com.maeng0830.listentothismusic.code.memberCode.MemberStatusCode;
 import com.maeng0830.listentothismusic.domain.Member;
 import java.util.ArrayList;
 import java.util.Collection;

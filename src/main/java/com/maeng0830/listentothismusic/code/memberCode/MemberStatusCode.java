@@ -7,6 +7,5 @@ import lombok.Getter;
 public enum MemberStatusCode {
     REQ,
     ING,
-    STOP,
-    WITHDRAW
+    STOP
 }
