@@ -22,6 +22,7 @@ import lombok.Setter;
 @Builder
 @Entity
 public class Member {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -1,7 +1,6 @@
 package com.maeng0830.listentothismusic.domain;
 
 import com.maeng0830.listentothismusic.code.commentCode.CommentStatusCode;
-import com.maeng0830.listentothismusic.code.postCode.PostStatusCode;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -23,6 +22,7 @@ import lombok.Setter;
 @Entity
 @Builder
 public class Comment {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

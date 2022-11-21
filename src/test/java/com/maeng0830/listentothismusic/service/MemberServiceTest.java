@@ -40,7 +40,7 @@ class MemberServiceTest {
 
         memberService.join(newMember);
 
-        Member findMember = memberRepository.findById(123L).orElseThrow(() -> new LimuException(
+        Member findMember = memberRepository.findById(newMember.getId()).orElseThrow(() -> new LimuException(
             MemberErrorCode.NON_EXISTENT_MEMBER));
 
         Assertions.assertThat(newMember.getEmail()).isEqualTo(findMember.getEmail());

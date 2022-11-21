@@ -86,7 +86,8 @@ public class PostServiceController {
         model.addAttribute("post", post);
         model.addAttribute("loginUser", loginUser);
 
-        List<Comment> commentList = commentRepository.findByPostIdAndCommentStatusNot(id, CommentStatusCode.DELETE);
+        List<Comment> commentList = commentRepository.findByPostIdAndCommentStatusNot(id,
+            CommentStatusCode.DELETE);
 
         model.addAttribute("commentList", commentList);
 
@@ -230,7 +231,8 @@ public class PostServiceController {
 
     // 댓글 수정(get)
     @GetMapping("/post/comment/mod")
-    public String modeComment(Model model, @RequestParam Long id, @AuthenticationPrincipal PrincipalDetails userDetails) {
+    public String modeComment(Model model, @RequestParam Long id,
+        @AuthenticationPrincipal PrincipalDetails userDetails) {
         if (userDetails == null) {
             throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
         }
@@ -245,7 +247,8 @@ public class PostServiceController {
 
     // 댓글 수정(get)
     @PostMapping("/post/comment/mod")
-    public String modeCommentSubmit(@RequestParam Long id, @AuthenticationPrincipal PrincipalDetails userDetails, Comment commentInput) {
+    public String modeCommentSubmit(@RequestParam Long id,
+        @AuthenticationPrincipal PrincipalDetails userDetails, Comment commentInput) {
         if (userDetails == null) {
             throw new LimuException(MemberErrorCode.REQUIRED_LOGIN);
         }

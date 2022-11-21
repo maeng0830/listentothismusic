@@ -224,6 +224,7 @@ public class PostService {
 
     // 검색 게시글 목록 조회
     public Page<Post> searchPostList(String searchValue, Pageable pageable) {
-       return postRepository.findByTitleContainingOrMusicTitleContainingAndPostStatusNot(searchValue, searchValue, PostStatusCode.DELETE, pageable);
+        return postRepository.findByTitleContainingOrMusicTitleContainingAndPostStatusNot(
+            searchValue, searchValue, PostStatusCode.DELETE, pageable);
     }
 }

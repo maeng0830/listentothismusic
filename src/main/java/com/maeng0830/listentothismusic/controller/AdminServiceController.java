@@ -4,6 +4,8 @@ import com.maeng0830.listentothismusic.domain.Comment;
 import com.maeng0830.listentothismusic.domain.Member;
 import com.maeng0830.listentothismusic.domain.Post;
 import com.maeng0830.listentothismusic.service.AdminService;
+import com.maeng0830.listentothismusic.util.Paging;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -33,22 +35,14 @@ public class AdminServiceController {
         @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Member> memberList = adminService.viewMemberList(pageable);
 
-        double start = Math.floor(
-            (memberList.getPageable().getPageNumber() / memberList.getPageable().getPageSize())
-                * memberList.getPageable().getPageSize() + 1);
-        double last =
-            start + memberList.getPageable().getPageSize() - 1 < memberList.getTotalPages()
-                ? start + memberList.getPageable().getPageSize() - 1 : memberList.getTotalPages();
-        int pageNumber = memberList.getPageable().getPageNumber();
-        int pageSize = memberList.getPageable().getPageSize();
-        int totalPages = memberList.getTotalPages();
+        Map<String, Double> pagingElement = Paging.createPagingElement(memberList);
 
         model.addAttribute("memberList", memberList);
-        model.addAttribute("start", start);
-        model.addAttribute("last", last);
-        model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("start", pagingElement.get("start"));
+        model.addAttribute("last", pagingElement.get("last"));
+        model.addAttribute("pageNumber", pagingElement.get("pageNumber"));
+        model.addAttribute("pageSize", pagingElement.get("pageSize"));
+        model.addAttribute("totalPages", pagingElement.get("totalPages"));
 
         return "/admin/member-list";
     }
@@ -78,21 +72,14 @@ public class AdminServiceController {
         @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Post> postList = adminService.viewReportedPostList(pageable);
 
-        double start = Math.floor(
-            (postList.getPageable().getPageNumber() / postList.getPageable().getPageSize())
-                * postList.getPageable().getPageSize() + 1);
-        double last = start + postList.getPageable().getPageSize() - 1 < postList.getTotalPages()
-            ? start + postList.getPageable().getPageSize() - 1 : postList.getTotalPages();
-        int pageNumber = postList.getPageable().getPageNumber();
-        int pageSize = postList.getPageable().getPageSize();
-        int totalPages = postList.getTotalPages();
+        Map<String, Double> pagingElement = Paging.createPagingElement(postList);
 
         model.addAttribute("postList", postList);
-        model.addAttribute("start", start);
-        model.addAttribute("last", last);
-        model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("start", pagingElement.get("start"));
+        model.addAttribute("last", pagingElement.get("last"));
+        model.addAttribute("pageNumber", pagingElement.get("pageNumber"));
+        model.addAttribute("pageSize", pagingElement.get("pageSize"));
+        model.addAttribute("totalPages", pagingElement.get("totalPages"));
 
         return "/admin/reported-post-list";
     }
@@ -121,22 +108,14 @@ public class AdminServiceController {
         @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<Comment> commentList = adminService.viewReportedCommentList(pageable);
 
-        double start = Math.floor(
-            (commentList.getPageable().getPageNumber() / commentList.getPageable().getPageSize())
-                * commentList.getPageable().getPageSize() + 1);
-        double last =
-            start + commentList.getPageable().getPageSize() - 1 < commentList.getTotalPages()
-                ? start + commentList.getPageable().getPageSize() - 1 : commentList.getTotalPages();
-        int pageNumber = commentList.getPageable().getPageNumber();
-        int pageSize = commentList.getPageable().getPageSize();
-        int totalPages = commentList.getTotalPages();
+        Map<String, Double> pagingElement = Paging.createPagingElement(commentList);
 
         model.addAttribute("commentList", commentList);
-        model.addAttribute("start", start);
-        model.addAttribute("last", last);
-        model.addAttribute("pageNumber", pageNumber);
-        model.addAttribute("pageSize", pageSize);
-        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("start", pagingElement.get("start"));
+        model.addAttribute("last", pagingElement.get("last"));
+        model.addAttribute("pageNumber", pagingElement.get("pageNumber"));
+        model.addAttribute("pageSize", pagingElement.get("pageSize"));
+        model.addAttribute("totalPages", pagingElement.get("totalPages"));
 
         return "/admin/reported-comment-list";
     }

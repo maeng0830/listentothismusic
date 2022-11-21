@@ -1,9 +1,9 @@
 package com.maeng0830.listentothismusic.domain;
 
+import com.maeng0830.listentothismusic.code.postCode.PostStatusCode;
 import com.maeng0830.listentothismusic.code.postCode.TagCode.Genre;
 import com.maeng0830.listentothismusic.code.postCode.TagCode.Mood;
 import com.maeng0830.listentothismusic.code.postCode.TagCode.Weather;
-import com.maeng0830.listentothismusic.code.postCode.PostStatusCode;
 import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -25,6 +25,7 @@ import lombok.Setter;
 @Entity
 @Builder
 public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // 글 번호
