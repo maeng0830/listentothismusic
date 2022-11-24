@@ -23,7 +23,7 @@ public class MemberService {
     private final CreateMail createMail;
 
     // 회원 가입(db 저장, 가입 안내 메일 전송)
-    public void join(Member member) {
+    public Member join(Member member) {
 
         if (memberRepository.findByEmail(member.getEmail()).isPresent()) {
             throw new LimuException(MemberErrorCode.DUPLICATE_MEMBER_EMAIL);
@@ -42,11 +42,13 @@ public class MemberService {
         String text = "<h2>LiMu(Listen To This Music) 가입을 축하합니다!</h2>";
 
         createMail.sendMail(mailAddress, subject, text);
+
+        return member;
     }
 
     // 인증 메일 전송
     // 예외 처리: 이미 인증된 회원 인증 메일 전송 X
-    public void authEmailSend(Member member) {
+    public Member authEmailSend(Member member) {
 
         if (member.isAuthYn()) {
             throw new LimuException(MemberErrorCode.ALREADY_AUTH);
@@ -65,12 +67,12 @@ public class MemberService {
         member.setAuthKey(uuid);
         member.setSendAuthEmailDtt(LocalDateTime.now());
 
-        memberRepository.save(member);
+        return memberRepository.save(member);
     }
 
     // 회원 가입 인증
     // 예외 처리: 잘못된 인증 링크, 이미 인증된 회원, 인증 메일 발송 후 5분 초과
-    public void mailAuth(String uuid) {
+    public Member mailAuth(String uuid) {
         Member member = memberRepository.findByAuthKey(uuid)
             .orElseThrow(() -> new LimuException(MemberErrorCode.INCORRECT_AUTH_LINK));
 
@@ -84,6 +86,8 @@ public class MemberService {
             member.setStatus(MemberStatusCode.ING);
             memberRepository.save(member);
         }
+
+        return member;
     }
 
     // 회원 정보 조회
@@ -94,14 +98,14 @@ public class MemberService {
     }
 
     // 회원 정보 수정
-    public void memberInfoMod(Member memberInput) {
+    public Member memberInfoMod(Member memberInput) {
         Member member = memberRepository.findByEmail(memberInput.getEmail())
             .orElseThrow(() -> new LimuException(MemberErrorCode.NON_EXISTENT_MEMBER));
 
         member.setNickName(memberInput.getNickName());
         member.setPhone(memberInput.getPhone());
 
-        memberRepository.save(member);
+        return memberRepository.save(member);
     }
 
     // 회원 탈퇴
